@@ -20,7 +20,6 @@
       <img src="{% static 'images/logo.png' %}" alt="Eventify Logo" class="logo">
     </a>
 
-    <!-- Botão de menu hamburguer -->
     <div class="menu-toggle" id="menu-toggle">
       ☰
     </div>
@@ -30,6 +29,7 @@
       <a href="certificados.html">MEUS CERTIFICADOS</a>
       <a href="meuseventos.html">MEUS EVENTOS</a>
       <a href="perfil.html">PERFIL</a>
+      <a href="{% url 'logout' %}">SAIR</a> 
     </nav>
   </header>
 
@@ -40,18 +40,20 @@
   <div class="perfil-container">
     <img src="{% static 'images/perfil.png' %}" alt="Foto de Perfil">
 
-
     <div class="dados-perfil">
-      <div class="campo">NOME:</div>
-      <div class="campo">CURSO:</div>
+      
+      <div class="campo">NOME: {{ usuario.nome | default:"Não informado" }}</div>
+      <div class="campo">CURSO: {{ usuario.curso | default:"Não informado" }}</div>
 
-      <div class="campo">DATA DE NASCIMENTO:</div>
-      <div class="campo">SEMESTRE:</div>
+      <div class="campo">DATA DE NASCIMENTO: {{ usuario.data_nascimento | default:"Não informado" }}</div>
+      <div class="campo">SEMESTRE: {{ usuario.semestre | default:"Não informado" }}</div>
 
-      <div class="campo">ENDEREÇO:</div>
-      <div class="campo">INSTITUIÇÃO:</div>
+      <div class="campo">ENDEREÇO: {{ usuario.endereco | default:"Não informado" }}</div>
+      <div class="campo">INSTITUIÇÃO: {{ usuario.instituicao | default:"Não informado" }}</div>
 
-      <div class="campo">EMAIL:</div>
+      <div class="campo">EMAIL: {{ usuario.email | default:"Não informado" }}</div>
+      
+      <div class="campo">LOGIN: {{ usuario.login | default:"Não informado" }}</div>
     </div>
   </div>
 

@@ -22,8 +22,8 @@ class Usuario(models.Model):
  
 
     nome = models.CharField(max_length=100, db_column='nome')
-
-    telefone = models.CharField(max_length=20, blank=True, null=True, db_column='telefone')
+    
+    # O campo 'telefone' foi removido daqui.
 
     instituicao = models.CharField(max_length=100, blank=True, null=True, db_column='instituicao')
 
@@ -33,7 +33,42 @@ class Usuario(models.Model):
 
     perfil = models.CharField(max_length=20, choices=PERFIL_CHOICES, db_column='perfil')
 
- 
+    # ===============================
+    # NOVOS CAMPOS ADICIONADOS
+    # ===============================
+    data_nascimento = models.DateField(
+        db_column='data_nascimento', 
+        null=True,  # O campo pode ser nulo no banco de dados
+        blank=True  # O campo pode ser deixado em branco em formulários
+    )
+    
+    endereco = models.CharField(
+        max_length=255, 
+        db_column='endereco', 
+        null=True, 
+        blank=True
+    )
+    
+    email = models.EmailField(
+        max_length=255, 
+        db_column='email', 
+        null=True, 
+        blank=True
+    )
+    
+    curso = models.CharField(
+        max_length=100, 
+        db_column='curso', 
+        null=True, 
+        blank=True
+    )
+    
+    semestre = models.IntegerField(
+        db_column='semestre', 
+        null=True, 
+        blank=True
+    )
+
 
     class Meta:
 
@@ -76,15 +111,10 @@ class Evento(models.Model):
     qtd_participantes = models.IntegerField(db_column='qtd_participantes')
 
     organizador = models.ForeignKey(
-
         Usuario,
-
         on_delete=models.CASCADE,
-
         db_column='id_organizador',
-
         related_name='eventos'
-
     )
 
  
@@ -118,29 +148,17 @@ class Evento(models.Model):
 class Inscricao(models.Model):
 
     usuario = models.ForeignKey(
-
         Usuario,
-
         on_delete=models.CASCADE,
-
         db_column='id_usuario',
-
         related_name='inscricoes'
-
     )
-
     evento = models.ForeignKey(
-
         Evento,
-
         on_delete=models.CASCADE,
-
         db_column='id_evento',
-
         related_name='inscricoes'
-
     )
-
     data_inscricao = models.DateTimeField(auto_now_add=True, db_column='data_inscricao')
 
  
@@ -176,17 +194,11 @@ class Inscricao(models.Model):
 class Certificado(models.Model):
 
     inscricao = models.ForeignKey(
-
         Inscricao,
-
         on_delete=models.CASCADE,
-
         db_column='id_inscricao',
-
         related_name='certificados'
-
     )
-
     data_emissao = models.DateTimeField(auto_now_add=True, db_column='data_emissao')
 
  

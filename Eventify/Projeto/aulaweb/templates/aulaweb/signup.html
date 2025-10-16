@@ -13,34 +13,74 @@
 <body>
   <div class="containerlogin">
 
-    <!-- Lado esquerdo: form branco -->
     <div class="left signup-left">
 
 
       <div class="signup-box">
         <h2>Sign up <span>Aluno</span></h2>
-        <form>
+
+        {% if messages %}
+        <div class="messages">
+          {% for message in messages %}
+          <p
+            style="color: {% if message.tags == 'error' %}red{% else %}green{% endif %}; text-align: center; margin-bottom: 15px; font-weight: bold;">
+            {{ message }}
+          </p>
+          {% endfor %}
+        </div>
+        {% endif %}
+
+        
+        <form method="POST" action="{% url 'signup' %}">
+          {% csrf_token %}
+
           <div class="input-group">
             <i class="fa fa-user"></i>
-            <input type="text" placeholder="Nome" required>
+            <input type="text" placeholder="Nome Completo" name="nome" required>
+          </div>
+          <div class="input-group">
+            <i class="fa fa-id-badge"></i>
+            <input type="text" placeholder="Usuário (login)" name="usuario" required>
+          </div>
+          <div class="input-group">
+            <i class="fa fa-lock"></i>
+            <input type="password" placeholder="Senha" name="senha" required>
           </div>
           <div class="input-group">
             <i class="fa fa-graduation-cap"></i>
-            <select required>
+            <select name="instituicao" required>
               <option value="" disabled selected>Instituição</option>
               <option value="if">Instituto Federal</option>
               <option value="uni">Universidade</option>
               <option value="outro">Outro</option>
             </select>
           </div>
+
           <div class="input-group">
-            <i class="fa fa-id-badge"></i>
-            <input type="text" placeholder="Usuário" required>
+            <i class="fa fa-envelope"></i>
+            <input type="email" placeholder="Email" name="email">
           </div>
+          
           <div class="input-group">
-            <i class="fa fa-lock"></i>
-            <input type="password" placeholder="Senha" required>
+            <i class="fa fa-calendar"></i>
+            <input type="text" placeholder="Data de Nascimento (AAAA-MM-DD)" name="data_nascimento" onfocus="(this.type='date')" onblur="(this.type='text')">
           </div>
+          
+          <div class="input-group">
+            <i class="fa fa-home"></i>
+            <input type="text" placeholder="Endereço" name="endereco">
+          </div>
+          
+          <div class="input-group">
+            <i class="fa fa-book"></i>
+            <input type="text" placeholder="Curso" name="curso">
+          </div>
+          
+          <div class="input-group">
+            <i class="fa fa-list-ol"></i>
+            <input type="number" placeholder="Semestre (ex: 5)" name="semestre" min="1">
+          </div>
+
 
           <div class="social-login">
             <img src="https://cdn-icons-png.flaticon.com/512/174/174857.png" alt="LinkedIn">
@@ -55,12 +95,10 @@
     </div>
 
     <div class="right signup-right">
-      <!-- Logo centralizada em cima -->
       <a href="index.html" class="logo">
         <img src="{% static 'images/logo.png' %}" alt="Eventify Logo">
       </a>
 
-      <!-- Imagem de boas-vindas abaixo da logo -->
       <div class="welcome-img">
         <img src="{% static 'images/bemvindo.png' %}" alt="Imagem de boas-vindas">
       </div>
