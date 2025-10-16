@@ -1,1 +1,71 @@
-e
+<!DOCTYPE html>
+
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Eventify - Certificados</title>
+  {% load static %}
+  <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+
+
+
+<body class="paginacertificados">
+
+
+  <header>
+    <a href="index.html">
+      <img src="{% static 'images/logo.png' %}" alt="Eventify Logo" class="logo">
+    </a>
+
+    <!-- Botão de menu hamburguer -->
+    <div class="menu-toggle" id="menu-toggle">
+      ☰
+    </div>
+
+    <nav id="nav-menu">
+      <a href="eventos.html">EVENTOS</a>
+      <a href="certificados.html">MEUS CERTIFICADOS</a>
+      <a href="meuseventos.html">MEUS EVENTOS</a>
+      <a href="perfil.html">PERFIL</a>
+    </nav>
+  </header>
+
+
+
+  <h2 class="h2perfil">Meu perfil</h2>
+
+  <div class="perfil-container">
+    <img src="{% static 'images/perfil.png' %}" alt="Foto de Perfil">
+
+
+    <div class="dados-perfil">
+      <div class="campo">NOME:</div>
+      <div class="campo">CURSO:</div>
+
+      <div class="campo">DATA DE NASCIMENTO:</div>
+      <div class="campo">SEMESTRE:</div>
+
+      <div class="campo">ENDEREÇO:</div>
+      <div class="campo">INSTITUIÇÃO:</div>
+
+      <div class="campo">EMAIL:</div>
+    </div>
+  </div>
+
+  </div>
+
+</body>
+
+<script>
+  const menuToggle = document.getElementById('menu-toggle');
+  const navMenu = document.getElementById('nav-menu');
+
+  menuToggle.addEventListener('click', () => {
+    navMenu.classList.toggle('active');
+  });
+</script>
+
+</html>

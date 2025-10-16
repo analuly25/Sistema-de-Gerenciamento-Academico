@@ -1,1 +1,99 @@
-a
+<!DOCTYPE html>
+
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Eventify - Certificados</title>
+  {% load static %}
+  <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+
+
+<body class="paginacertificados">
+
+  <header>
+    <a href="index.html">
+      <img src="{% static 'images/logo.png' %}" alt="Eventify Logo" class="logo">
+    </a>
+
+    <!-- Botão de menu hamburguer -->
+    <div class="menu-toggle" id="menu-toggle">
+      ☰
+    </div>
+
+    <nav id="nav-menu">
+      <a href="eventos.html">EVENTOS</a>
+      <a href="certificados.html">MEUS CERTIFICADOS</a>
+      <a href="meuseventos.html">MEUS EVENTOS</a>
+      <a href="perfil.html">PERFIL</a>
+    </nav>
+  </header>
+
+
+
+  <div class="containercertificados">
+
+    <h2>Certificados</h2>
+
+    <div class="gridcertificados">
+
+      <div class="cardcertificados">
+        <h3>Monitoria</h3>
+        <img src="{% static 'images/certificado.webp' %}" alt="Certificado Monitoria">
+      </div>
+
+      <div class="cardcertificados">
+        <h3>Palestra</h3>
+        <img src="{% static 'images/certificado.webp' %}" alt="Certificado Palestra">
+      </div>
+
+      <div class="cardcertificados">
+        <h3>Monitoria</h3>
+        <img src="{% static 'images/certificado.webp' %}" alt="Certificado Monitoria">
+      </div>
+
+      <div class="cardcertificados">
+        <h3>Palestra</h3>
+        <img src="{% static 'images/certificado.webp' %}" alt="Certificado Palestra">
+      </div>
+
+      <div class="cardcertificados">
+        <h3>Monitoria</h3>
+        <img src="{% static 'images/certificado.webp' %}" alt="Certificado Monitoria">
+      </div>
+
+      <div class="cardcertificados">
+        <h3>Palestra</h3>
+        <img src="{% static 'images/certificado.webp' %}" alt="Certificado Palestra">
+      </div>
+
+      <div class="cardcertificados">
+        <h3>Palestra</h3>
+        <img src="{% static 'images/certificado.webp' %}" alt="Certificado Palestra">
+      </div>
+
+      <div class="cardcertificados">
+        <h3>Palestra</h3>
+        <img src="{% static 'images/certificado.webp' %}" alt="Certificado Palestra">
+      </div>
+
+    </div>
+
+  </div>
+
+  <script>
+    const menuToggle = document.getElementById('menu-toggle');
+    const navMenu = document.getElementById('nav-menu');
+
+    menuToggle.addEventListener('click', () => {
+      navMenu.classList.toggle('active');
+    });
+  </script>
+
+
+</body>
+
+
+</html>

@@ -1,1 +1,74 @@
-f
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Eventify - Sign up</title>
+  {% load static %}
+  <link rel="stylesheet" href="{% static 'style.css' %}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+  <div class="containerlogin">
+
+    <!-- Lado esquerdo: form branco -->
+    <div class="left signup-left">
+
+
+      <div class="signup-box">
+        <h2>Sign up <span>Aluno</span></h2>
+        <form>
+          <div class="input-group">
+            <i class="fa fa-user"></i>
+            <input type="text" placeholder="Nome" required>
+          </div>
+          <div class="input-group">
+            <i class="fa fa-graduation-cap"></i>
+            <select required>
+              <option value="" disabled selected>Instituição</option>
+              <option value="if">Instituto Federal</option>
+              <option value="uni">Universidade</option>
+              <option value="outro">Outro</option>
+            </select>
+          </div>
+          <div class="input-group">
+            <i class="fa fa-id-badge"></i>
+            <input type="text" placeholder="Usuário" required>
+          </div>
+          <div class="input-group">
+            <i class="fa fa-lock"></i>
+            <input type="password" placeholder="Senha" required>
+          </div>
+
+          <div class="social-login">
+            <img src="https://cdn-icons-png.flaticon.com/512/174/174857.png" alt="LinkedIn">
+            <img src="https://cdn-icons-png.flaticon.com/512/281/281769.png" alt="Gmail">
+          </div>
+
+          <button type="submit" class="btn-login">Sign up</button>
+          <div class="divider">ou</div>
+          <a href="login.html" class="btn-signup">Log in</a>
+        </form>
+      </div>
+    </div>
+
+    <div class="right signup-right">
+      <!-- Logo centralizada em cima -->
+      <a href="index.html" class="logo">
+        <img src="{% static 'images/logo.png' %}" alt="Eventify Logo">
+      </a>
+
+      <!-- Imagem de boas-vindas abaixo da logo -->
+      <div class="welcome-img">
+        <img src="{% static 'images/bemvindo.png' %}" alt="Imagem de boas-vindas">
+      </div>
+    </div>
+
+
+
+  </div>
+</body>
+
+</html>

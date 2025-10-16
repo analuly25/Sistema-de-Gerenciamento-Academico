@@ -9,7 +9,7 @@ def login(request):
 
     return render(request, 'aulaweb/login.html')
 
-def criar_conta(request):
+def signup(request):
     return render(request, 'aulaweb/signup.html')
 
 def eventos(request):
@@ -18,7 +18,7 @@ def eventos(request):
 def certificados(request):
     return render(request, 'aulaweb/certificados.html')
 
-def meus_eventos(request):
+def meuseventos(request):
     return render(request, 'aulaweb/meuseventos.html')
 
 def perfil(request):

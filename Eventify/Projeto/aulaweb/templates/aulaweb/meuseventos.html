@@ -1,1 +1,143 @@
-d
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Eventify - Eventos</title>
+  {% load static %}
+  <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+
+<body>
+
+
+  <header>
+    <a href="index.html">
+      <img src="{% static 'images/logo.png' %}" alt="Eventify Logo" class="logo">
+    </a>
+
+    <!-- Botão de menu hamburguer -->
+    <div class="menu-toggle" id="menu-toggle">
+      ☰
+    </div>
+
+    <nav id="nav-menu">
+      <a href="eventos.html">EVENTOS</a>
+      <a href="certificados.html">MEUS CERTIFICADOS</a>
+      <a href="meuseventos.html">MEUS EVENTOS</a>
+      <a href="perfil.html">PERFIL</a>
+    </nav>
+  </header>
+
+
+  <div class="container">
+    <section class="eventos">
+      <h2>Meus Eventos</h2>
+
+      <div class="evento">
+        <div class="dia">4</div>
+        <h3>Palestra Ciência da Computação</h3>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec quis commodo ligula. Maecenas mollis rutrum
+          libero.</p>
+        <div class="acoes">
+          <a href="certificados.html" class="certificadopronto">CERTIFICADO</a>
+        </div>
+      </div>
+
+      <div class="evento">
+        <div class="dia">9</div>
+        <h3>Monitoria Complementar</h3>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec quis commodo ligula. Maecenas mollis rutrum
+          libero.</p>
+        <div class="acoes">
+          <a href="#" class="certificadonaopronto">CERTIFICADO</a>
+
+        </div>
+      </div>
+
+      <div class="evento">
+        <div class="dia">12</div>
+        <h3>Seminário</h3>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec quis commodo ligula. Maecenas mollis rutrum
+          libero.</p>
+        <div class="acoes">
+          <a href="certificados.html" class="certificadopronto">CERTIFICADO</a>
+
+        </div>
+      </div>
+
+    </section>
+
+    <aside class="calendario">
+      <h3>SETEMBRO</h3>
+      <table>
+        <tr>
+          <th>Su</th>
+          <th>Mo</th>
+          <th>Tu</th>
+          <th>We</th>
+          <th>Th</th>
+          <th>Fr</th>
+          <th>Sa</th>
+        </tr>
+        <tr>
+          <td></td>
+          <td>1</td>
+          <td>2</td>
+          <td>3</td>
+          <td class="hoje">4</td>
+          <td>5</td>
+          <td>6</td>
+        </tr>
+        <tr>
+          <td>7</td>
+          <td>8</td>
+          <td class="hoje">9</td>
+          <td>10</td>
+          <td>11</td>
+          <td>12</td>
+          <td>13</td>
+        </tr>
+        <tr>
+          <td>14</td>
+          <td>15</td>
+          <td>16</td>
+          <td>17</td>
+          <td>18</td>
+          <td>19</td>
+          <td>20</td>
+        </tr>
+        <tr>
+          <td>21</td>
+          <td>22</td>
+          <td>23</td>
+          <td>24</td>
+          <td>25</td>
+          <td class="hoje">26</td>
+          <td>27</td>
+        </tr>
+        <tr>
+          <td>28</td>
+          <td>29</td>
+          <td>30</td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+      </table>
+    </aside>
+  </div>
+</body>
+
+<script>
+  const menuToggle = document.getElementById('menu-toggle');
+  const navMenu = document.getElementById('nav-menu');
+
+  menuToggle.addEventListener('click', () => {
+    navMenu.classList.toggle('active');
+  });
+</script>
+
+</html>

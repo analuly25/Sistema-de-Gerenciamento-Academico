@@ -1,1 +1,63 @@
-c
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Eventify - Login</title>
+  {% load static %}
+  <link rel="stylesheet" href="{% static 'style.css' %}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+
+
+  <div class="containerlogin">
+
+    <div class="left">
+
+      <a href="index.html" class="logo">
+        <img src="{% static 'images/logo.png' %}" alt="Eventify Logo">
+      </a>
+
+      <div class="welcome-img">
+        <img src="{% static 'images/devolta.png' %}" alt="Imagem de boas-vindas">
+
+      </div>
+
+    </div>
+
+
+
+    <div class="right">
+      <div class="login-box">
+        <h2>Log in</h2>
+        <form>
+          <div class="input-group">
+            <i class="fa fa-user"></i>
+            <input type="text" placeholder="Usuário" required>
+          </div>
+          <div class="input-group">
+            <i class="fa fa-lock"></i>
+            <input type="password" placeholder="Senha" required>
+          </div>
+
+          <a href="#" class="forgot">Esqueci a senha</a>
+
+          <div class="social-login">
+            <img src="https://cdn-icons-png.flaticon.com/512/174/174857.png" alt="LinkedIn">
+            <img src="https://cdn-icons-png.flaticon.com/512/281/281769.png" alt="Gmail">
+          </div>
+
+          <button type="submit" class="btn-login">Log in</button>
+          <div class="divider">ou</div>
+
+          <a href="signup.html" class="btn-signup">Sign up</a>
+        </form>
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>
