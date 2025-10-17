@@ -1,5 +1,9 @@
 # Eventify - Sistema de Gerenciamento Acadêmico
 
+# Integrantes 
+
+* Ana Luiza Gomes, Bárbara Parente e Beatriz Espindola
+
 ## 1. Descrição do Projeto
 
 O **Eventify** é um sistema de gerenciamento acadêmico e de eventos, desenvolvido com a framework Python Django. A plataforma permite que utilizadores se registem, visualizem eventos disponíveis, se inscrevam e, após a conclusão, gerem os seus próprios certificados.
@@ -39,7 +43,60 @@ Este projeto foi construído utilizando as seguintes tecnologias:
     * CSS3 (para estilização, através do ficheiro `style.css`).
     * JavaScript (para interatividade, como o menu "hambúrguer" e a caixa de detalhes dos eventos).
 
-## 4. Como Executar o Projeto
+## 4. Documento de Requisitos e Casos de Uso
+
+Esta secção detalha os principais casos de uso do sistema.
+
+### 4.1. Autenticação de Usuários
+* **Descrição:** O sistema deve permitir que um utilizador aceda à sua conta através de um formulário de login.
+* **Atores:** Aluno, Professor, Organizador.
+* **Fluxo Principal:**
+    1.  O utilizador acede à página de login.
+    2.  Informa o seu `login` e `senha`.
+    3.  O sistema valida as credenciais. Se forem válidas, o utilizador é redirecionado para a sua página de perfil.
+* **Fluxo de Exceção:** Se as credenciais forem inválidas, o sistema exibe uma mensagem de erro.
+
+### 4.2. Cadastro de Usuários
+* **Descrição:** O sistema deve permitir que um novo utilizador (com o perfil padrão de "aluno") crie uma conta.
+* **Ator:** Visitante (não autenticado).
+* **Fluxo Principal:**
+    1.  O visitante acede à página de "Sign up".
+    2.  Preenche o formulário com os seus dados pessoais e académicos.
+    3.  O sistema valida se o `login` já existe.
+    4.  Se os dados forem válidos, o sistema cria um novo registo de `Usuario` e redireciona para a página de login.
+* **Fluxo de Exceção:** Se o `login` já estiver em uso ou se os dados forem inválidos, o sistema exibe uma mensagem de erro.
+
+### 4.3. Cadastro de Eventos
+* **Descrição:** Um utilizador com perfil "organizador" deve poder criar um novo evento.
+* **Ator:** Organizador.
+* **Fluxo Principal:**
+    1.  O organizador, já logado, acede à funcionalidade "Criar Evento".
+    2.  Preenche o formulário com os detalhes do evento (tipo, data, local, etc.).
+    3.  O sistema valida os dados e, se estiverem corretos, cria um novo registo de `Evento` associado ao organizador.
+* **Fluxo de Exceção:** Se algum campo obrigatório não for preenchido, o sistema exibe uma mensagem de erro.
+
+### 4.4. Inscrição de Usuários em Eventos
+* **Descrição:** Um utilizador autenticado deve poder inscrever-se num evento disponível.
+* **Atores:** Aluno, Professor.
+* **Fluxo Principal:**
+    1.  O utilizador, logado, acede à lista de eventos.
+    2.  Clica no botão de inscrição de um evento.
+    3.  O sistema cria um registo na tabela `Inscricao`, ligando o utilizador ao evento.
+    4.  Uma mensagem de sucesso é exibida.
+* **Fluxo de Exceção:** Se o utilizador já estiver inscrito, o sistema exibe uma mensagem de aviso.
+
+### 4.5. Emissão de Certificados
+* **Descrição:** Um utilizador deve poder gerar um certificado para um evento que já concluiu.
+* **Atores:** Aluno, Professor.
+* **Fluxo Principal:**
+    1.  O utilizador acede à página "Meus Eventos".
+    2.  Para um evento cuja data de término já passou, clica em "Gerar Certificado".
+    3.  O sistema verifica se o certificado já não foi emitido.
+    4.  Um novo registo de `Certificado` é criado, associado à inscrição.
+    5.  O utilizador é redirecionado para a página "Meus Certificados".
+* **Fluxo de Exceção:** Se o evento ainda não terminou ou se o certificado já foi emitido, o sistema informa o utilizador.
+
+## 5. Como Executar o Projeto
 
 Para executar este projeto localmente, segue estes passos básicos (assumindo que tens o Python e o `pip` instalados):
 
