@@ -1,6 +1,6 @@
 # Eventify - Sistema de Gerenciamento Acadêmico
 
-# Integrantes 
+## Integrantes 
 
 * Ana Luiza Gomes, Bárbara Parente e Beatriz Espindola
 
@@ -45,13 +45,13 @@ Este projeto foi construído utilizando as seguintes tecnologias:
 
 ## 4. Documento de Requisitos e Casos de Uso
 
-Esta secção detalha os principais casos de uso do sistema.
+Esta seção detalha os principais casos de uso do sistema.
 
 ### 4.1. Autenticação de Usuários
-* **Descrição:** O sistema deve permitir que um utilizador aceda à sua conta através de um formulário de login.
+* **Descrição:** O sistema deve permitir que um utilizador acesse sua conta através de um formulário de login.
 * **Atores:** Aluno, Professor, Organizador.
 * **Fluxo Principal:**
-    1.  O utilizador acede à página de login.
+    1.  O utilizador acessa a página de login.
     2.  Informa o seu `login` e `senha`.
     3.  O sistema valida as credenciais. Se forem válidas, o utilizador é redirecionado para a sua página de perfil.
 * **Fluxo de Exceção:** Se as credenciais forem inválidas, o sistema exibe uma mensagem de erro.
@@ -60,7 +60,7 @@ Esta secção detalha os principais casos de uso do sistema.
 * **Descrição:** O sistema deve permitir que um novo utilizador (com o perfil padrão de "aluno") crie uma conta.
 * **Ator:** Visitante (não autenticado).
 * **Fluxo Principal:**
-    1.  O visitante acede à página de "Sign up".
+    1.  O visitante acessa a página de "Sign up".
     2.  Preenche o formulário com os seus dados pessoais e académicos.
     3.  O sistema valida se o `login` já existe.
     4.  Se os dados forem válidos, o sistema cria um novo registo de `Usuario` e redireciona para a página de login.
@@ -70,7 +70,7 @@ Esta secção detalha os principais casos de uso do sistema.
 * **Descrição:** Um utilizador com perfil "organizador" deve poder criar um novo evento.
 * **Ator:** Organizador.
 * **Fluxo Principal:**
-    1.  O organizador, já logado, acede à funcionalidade "Criar Evento".
+    1.  O organizador, já logado, acessa a funcionalidade "Criar Evento".
     2.  Preenche o formulário com os detalhes do evento (tipo, data, local, etc.).
     3.  O sistema valida os dados e, se estiverem corretos, cria um novo registo de `Evento` associado ao organizador.
 * **Fluxo de Exceção:** Se algum campo obrigatório não for preenchido, o sistema exibe uma mensagem de erro.
@@ -79,7 +79,7 @@ Esta secção detalha os principais casos de uso do sistema.
 * **Descrição:** Um utilizador autenticado deve poder inscrever-se num evento disponível.
 * **Atores:** Aluno, Professor.
 * **Fluxo Principal:**
-    1.  O utilizador, logado, acede à lista de eventos.
+    1.  O utilizador, logado, acessa a lista de eventos.
     2.  Clica no botão de inscrição de um evento.
     3.  O sistema cria um registo na tabela `Inscricao`, ligando o utilizador ao evento.
     4.  Uma mensagem de sucesso é exibida.
@@ -89,7 +89,7 @@ Esta secção detalha os principais casos de uso do sistema.
 * **Descrição:** Um utilizador deve poder gerar um certificado para um evento que já concluiu.
 * **Atores:** Aluno, Professor.
 * **Fluxo Principal:**
-    1.  O utilizador acede à página "Meus Eventos".
+    1.  O utilizador acessa a página "Meus Eventos".
     2.  Para um evento cuja data de término já passou, clica em "Gerar Certificado".
     3.  O sistema verifica se o certificado já não foi emitido.
     4.  Um novo registo de `Certificado` é criado, associado à inscrição.
@@ -98,11 +98,11 @@ Esta secção detalha os principais casos de uso do sistema.
 
 ## 5. Como Executar o Projeto
 
-Para executar este projeto localmente, segue estes passos básicos (assumindo que tens o Python e o `pip` instalados):
+Para executar este projeto localmente, siga estes passos básicos (assumindo que tem o Python e o `pip` instalados):
 
 1.  **Clonar o Repositório (ou descarregar os ficheiros)**
     ```bash
-    # Se estiveres a usar o Git
+    # Se estiver usando o Git
     git clone [URL_DO_TEU_REPOSITORIO]
     cd [NOME_DA_PASTA_DO_PROJETO]
     ```
@@ -116,15 +116,7 @@ Para executar este projeto localmente, segue estes passos básicos (assumindo qu
     source venv/bin/activate
     ```
 
-3.  **Instalar as Dependências**
-    (É uma boa prática criar um ficheiro `requirements.txt` com as dependências, como o Django)
-    ```bash
-    pip install Django
-    # Se tiveres um requirements.txt:
-    # pip install -r requirements.txt
-    ```
-
-4.  **Aplicar as Migrações da Base de Dados**
+3.  **Aplicar as Migrações da Base de Dados**
     Isto irá criar o ficheiro `db.sqlite3` e definir as tabelas (`Usuario`, `Evento`, etc.).
     ```bash
     # Navega para a pasta que contém o manage.py
@@ -132,10 +124,10 @@ Para executar este projeto localmente, segue estes passos básicos (assumindo qu
     python manage.py migrate
     ```
 
-5.  **Executar o Servidor de Desenvolvimento**
+4.  **Executar o Servidor de Desenvolvimento**
     ```bash
     python manage.py runserver
     ```
 
-6.  **Aceder ao Projeto**
-    Abre o teu navegador e visita [http://127.0.0.1:8000/](http://127.0.0.1:8000/) para ver a aplicação a funcionar.
+5.  **Acessar o Projeto**
+    Abra o seu navegador e visite [http://127.0.0.1:8000/](http://127.0.0.1:8000/) para ver a aplicação funcionando.
