@@ -17,7 +17,7 @@ urlpatterns = [
     path('inscrever/<int:evento_id>/', views.inscrever_evento, name='inscrever_evento'),
     
     # ===============================
-    # NOVA ROTA ADICIONADA
+    # Nova rota adicionada 
     # ===============================
     path('cancelar_inscricao/<int:evento_id>/', views.cancelar_inscricao, name='cancelar_inscricao'),
     
