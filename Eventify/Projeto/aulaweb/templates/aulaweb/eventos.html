@@ -13,20 +13,23 @@
 <body class='paginaeventos'>
 
   <header>
-    <a href="index.html">
+    <a href="{% url 'index' %}">
       <img src="{% static 'images/logo.png' %}" alt="Eventify Logo" class="logo">
     </a>
 
-    <!-- Botão de menu hamburguer -->
     <div class="menu-toggle" id="menu-toggle">
       ☰
     </div>
 
     <nav id="nav-menu">
-      <a href="eventos.html">EVENTOS</a>
-      <a href="certificados.html">MEUS CERTIFICADOS</a>
-      <a href="meuseventos.html">MEUS EVENTOS</a>
-      <a href="perfil.html">PERFIL</a>
+      <a href="{% url 'eventos' %}">EVENTOS</a>
+      <a href="{% url 'meuseventos' %}">MEUS EVENTOS</a>
+      <a href="{% url 'certificados' %}">MEUS CERTIFICADOS</a>
+      {% if usuario.perfil == 'organizador' %}
+      <a href="{% url 'criar_evento' %}" style="background-color: #f8e08e;">CRIAR EVENTO</a>
+      {% endif %}
+      <a href="{% url 'perfil' %}">PERFIL</a>
+      <a href="{% url 'logout' %}">SAIR</a>
     </nav>
   </header>
 
@@ -35,53 +38,72 @@
     <section class="eventos">
       <h2>Próximos Eventos</h2>
 
-      <div class="evento">
-        <div class="dia">4</div>
-        <h3>Palestra Ciência da Computação</h3>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec quis commodo ligula. Maecenas mollis rutrum
-          libero.</p>
-        <div class="acoes">
-          <a href="#" class="inscricao">INSCRIÇÃO</a>
-          <a href="#" class="salvar">SALVAR</a>
-        </div>
+      {% if messages %}
+      <div class="messages" style="margin-bottom: 20px;">
+        {% for message in messages %}
+        <p
+          style="color: {% if message.tags == 'error' %}red{% elif message.tags == 'warning' %}#b8860b{% else %}green{% endif %}; text-align: center; margin-bottom: 10px; font-weight: bold; background: #fff; padding: 10px; border-radius: 10px;">
+          {{ message }}
+        </p>
+        {% endfor %}
+      </div>
+      {% endif %}
+
+      <div class="evento-detalhe" id="evento-detalhe-box" style="display: none;">
+        <button class="detalhe-close" id="detalhe-close-btn">&times;</button>
+        <h3 id="detalhe-tipo"></h3>
+        <p>
+          <strong>Organizador:</strong> <span id="detalhe-organizador"></span><br>
+          <strong>Local:</strong> <span id="detalhe-local"></span><br>
+          <strong>Início:</strong> <span id="detalhe-data_inicio"></span><br>
+          <strong>Fim:</strong> <span id="detalhe-data_fim"></span><br>
+          <strong>Horário:</strong> <span id="detalhe-horario"></span><br>
+          <strong>Vagas:</strong> <span id="detalhe-qtd"></span>
+        </p>
       </div>
 
-      <div class="evento">
-        <div class="dia">9</div>
-        <h3>Monitoria Complementar</h3>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec quis commodo ligula. Maecenas mollis rutrum
-          libero.</p>
-        <div class="acoes">
-          <a href="#" class="inscricao">INSCRIÇÃO</a>
-          <a href="#" class="salvar">SALVAR</a>
-        </div>
-      </div>
 
-      <div class="evento">
-        <div class="dia">9</div>
-        <h3>Roda de Conversa</h3>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec quis commodo ligula. Maecenas mollis rutrum
-          libero.</p>
-        <div class="acoes">
-          <a href="#" class="inscricao">INSCRIÇÃO</a>
-          <a href="#" class="salvar">SALVAR</a>
-        </div>
-      </div>
+      {% for evento in eventos_lista %}
+      <div class="evento" id="evento-card-{{ evento.id }}">
+        <div class="dia">{{ evento.data_inicio.day }}</div>
 
-      <div class="evento">
-        <div class="dia">26</div>
-        <h3>Seminário </h3>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec quis commodo ligula. Maecenas mollis rutrum
-          libero.</p>
+        <h3>{{ evento.tipo }}</h3>
+
+        <p>
+          <strong>Local:</strong> {{ evento.local }} <br>
+          <strong>Data:</strong> {{ evento.data_inicio|date:"d/m/Y" }}
+        </p>
+
         <div class="acoes">
-          <a href="#" class="inscricao">INSCRIÇÃO</a>
-          <a href="#" class="salvar">SALVAR</a>
+          <a href="{% url 'inscrever_evento' evento.id %}" class="inscricao">INSCRIÇÃO</a>
+          
+          <a href="#" class="salvar evento-detalhe-btn"
+             data-tipo="{{ evento.tipo }}" 
+             data-local="{{ evento.local }}"
+             data-data_inicio="{{ evento.data_inicio|date:"d/m/Y" }}" 
+             data-data_fim="{{ evento.data_fim|date:"d/m/Y" }}"
+             data-horario="{{ evento.horario|time:"H:i" }}" 
+             data-qtd="{{ evento.qtd_participantes }}"
+             data-organizador="{{ evento.organizador.nome }}"
+             data-id-evento="{{ evento.id }}"
+             data-card-id="evento-card-{{ evento.id }}">
+            DETALHES
+          </a>
         </div>
       </div>
+      {% endfor %}
+
+      {% if not eventos_lista %}
+      <div class="evento">
+        <h3>Nenhum evento cadastrado no momento.</h3>
+        <p>Volte mais tarde!</p>
+      </div>
+      {% endif %}
+
 
     </section>
-    <aside class="calendario">
 
+    <aside class="calendario">
       <h3>SETEMBRO</h3>
       <table>
         <tr>
@@ -142,13 +164,81 @@
     </aside>
   </div>
 
+
   <script>
+    // Script do Menu Hamburguer
     const menuToggle = document.getElementById('menu-toggle');
     const navMenu = document.getElementById('nav-menu');
 
-    menuToggle.addEventListener('click', () => {
-      navMenu.classList.toggle('active');
+    if (menuToggle && navMenu) {
+      menuToggle.addEventListener('click', () => {
+        navMenu.classList.toggle('active');
+      });
+    }
+
+    // ===================================
+    // Lógica da Div de Detalhes
+    // ===================================
+
+    // 1. Selecionar os elementos do DOM
+    const detalheBox = document.getElementById('evento-detalhe-box');
+    const detalheCloseBtn = document.getElementById('detalhe-close-btn');
+    
+    // ===============================
+    // MUDANÇA AQUI: O seletor mudou
+    // ===============================
+    const botoesDetalhe = document.querySelectorAll('.evento-detalhe-btn');
+
+    let eventoAbertoId = null; // Para saber qual card está aberto
+
+    // 2. Adicionar o "ouvinte" de clique a cada BOTÃO
+    botoesDetalhe.forEach(botao => {
+      botao.addEventListener('click', (evento) => {
+        
+        // Prevenir que o link '#' recarregue a página
+        evento.preventDefault(); 
+        
+        // 3. Obter os dados guardados nos atributos 'data-*' do BOTÃO
+        const dados = botao.dataset;
+        const cardId = dados.cardId;
+        const cardDiv = document.getElementById(cardId);
+
+        // 4. Lógica de Toggle
+        if (eventoAbertoId === cardId) {
+          detalheBox.style.display = 'none';
+          eventoAbertoId = null;
+          return;
+        }
+
+        // 5. Preencher o HTML da caixa de detalhes
+        document.getElementById('detalhe-tipo').textContent = dados.tipo;
+        document.getElementById('detalhe-organizador').textContent = dados.organizador;
+        document.getElementById('detalhe-local').textContent = dados.local;
+        document.getElementById('detalhe-data_inicio').textContent = dados.data_inicio;
+        document.getElementById('detalhe-data_fim').textContent = dados.data_fim;
+        document.getElementById('detalhe-horario').textContent = dados.horario;
+        document.getElementById('detalhe-qtd').textContent = dados.qtd;
+
+        // 6. Mover a caixa de detalhes
+        cardDiv.after(detalheBox);
+
+        // 7. Mostrar a caixa de detalhes
+        detalheBox.style.display = 'block';
+
+        // 8. Guardar a referência
+        eventoAbertoId = cardId;
+      });
     });
+
+    // 9. Função para fechar a caixa de detalhes
+    const fecharDetalhes = () => {
+      detalheBox.style.display = 'none';
+      eventoAbertoId = null;
+    };
+
+    // 10. Adicionar "ouvinte" para fechar a caixa
+    detalheCloseBtn.addEventListener('click', fecharDetalhes);
+
   </script>
 
 </body>

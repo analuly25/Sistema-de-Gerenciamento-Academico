@@ -880,3 +880,78 @@ body.paginacertificados {
     font-size: 20px;
   }
 }
+
+/* ========================================================================= */
+/* 8. ESTILOS DA DIV DE DETALHES DO EVENTO */
+/* ========================================================================= */
+
+/* Faz o título do evento na lista ser clicável */
+/* Faz o título do evento na lista ser clicável */
+.evento h3.evento-titulo-clicavel {
+  cursor: pointer;
+  color: #333;
+  transition: color 0.3s;
+}
+.evento h3.evento-titulo-clicavel:hover {
+  color: #e6532d;
+}
+
+/* A caixa de detalhes (inspirada na classe .evento) */
+.evento-detalhe {
+  background: #fffdf9; /* Um fundo ligeiramente diferente do .evento (#fff) */
+  border-radius: 15px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  padding: 20px 30px;
+  margin-bottom: 20px;
+  /* margin-left: 5%; */ /* Opcional: para indentar */
+  position: relative;
+  border: 1px solid #e6532d;
+}
+
+/* Título na caixa de detalhes */
+.evento-detalhe h3 {
+  font-size: 22px;
+  color: #e6532d;
+  margin-bottom: 20px;
+}
+
+/* Parágrafo na caixa de detalhes */
+.evento-detalhe p {
+  font-size: 16px;
+  line-height: 1.6;
+  color: #333;
+  margin-bottom: 10px;
+}
+.evento-detalhe p strong {
+  color: #000;
+}
+
+/* Botão de fechar (reutilizado do modal) */
+.detalhe-close {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  font-size: 24px;
+  font-weight: bold;
+  color: #888;
+  cursor: pointer;
+  background: none;
+  border: none;
+}
+.detalhe-close:hover {
+  color: #000;
+}
+
+/* ========================================================================= */
+/* 9. BOTÃO DE CANCELAR INSCRIÇÃO */
+/* ========================================================================= */
+
+.evento .acoes .btn-cancelar {
+  background: #e07474; /* Fundo vermelho claro (igual ao .salvar) */
+  color: #e80e0e; /* Texto vermelho escuro */
+
+}
+
+.evento .acoes .btn-cancelar:hover {
+  background: #f1b8b8; /* Vermelho um pouco mais escuro no hover */
+}

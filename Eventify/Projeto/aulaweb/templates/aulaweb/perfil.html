@@ -25,11 +25,16 @@
     </div>
 
     <nav id="nav-menu">
-      <a href="eventos.html">EVENTOS</a>
-      <a href="certificados.html">MEUS CERTIFICADOS</a>
-      <a href="meuseventos.html">MEUS EVENTOS</a>
-      <a href="perfil.html">PERFIL</a>
-      <a href="{% url 'logout' %}">SAIR</a> 
+      <a href="{% url 'eventos' %}">EVENTOS</a>
+      <a href="{% url 'meuseventos' %}">MEUS EVENTOS</a>
+      <a href="{% url 'certificados' %}">MEUS CERTIFICADOS</a>
+      
+      {% if usuario.perfil == 'organizador' %}
+        <a href="{% url 'criar_evento' %}" style="background-color: #f8e08e;">CRIAR EVENTO</a>
+      {% endif %}
+      
+      <a href="{% url 'perfil' %}">PERFIL</a>
+      <a href="{% url 'logout' %}">SAIR</a>
     </nav>
   </header>
 

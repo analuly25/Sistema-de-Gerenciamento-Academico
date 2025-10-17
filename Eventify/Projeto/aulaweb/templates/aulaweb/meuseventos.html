@@ -13,20 +13,23 @@
 
 
   <header>
-    <a href="index.html">
+    <a href="{% url 'index' %}">
       <img src="{% static 'images/logo.png' %}" alt="Eventify Logo" class="logo">
     </a>
 
-    <!-- Botão de menu hamburguer -->
     <div class="menu-toggle" id="menu-toggle">
       ☰
     </div>
 
     <nav id="nav-menu">
-      <a href="eventos.html">EVENTOS</a>
-      <a href="certificados.html">MEUS CERTIFICADOS</a>
-      <a href="meuseventos.html">MEUS EVENTOS</a>
-      <a href="perfil.html">PERFIL</a>
+      <a href="{% url 'eventos' %}">EVENTOS</a>
+      <a href="{% url 'meuseventos' %}">MEUS EVENTOS</a>
+      <a href="{% url 'certificados' %}">MEUS CERTIFICADOS</a>
+      {% if usuario.perfil == 'organizador' %}
+      <a href="{% url 'criar_evento' %}" style="background-color: #f8e08e;">CRIAR EVENTO</a>
+      {% endif %}
+      <a href="{% url 'perfil' %}">PERFIL</a>
+      <a href="{% url 'logout' %}">SAIR</a>
     </nav>
   </header>
 
@@ -35,37 +38,49 @@
     <section class="eventos">
       <h2>Meus Eventos</h2>
 
+      {% if messages %}
+      <div class="messages" style="margin-bottom: 20px;">
+        {% for message in messages %}
+        <p
+          style="color: {% if message.tags == 'error' %}red{% elif message.tags == 'warning' %}#b8860b{% else %}green{% endif %}; text-align: center; margin-bottom: 10px; font-weight: bold; background: #fff; padding: 10px; border-radius: 10px;">
+          {{ message }}
+        </p>
+        {% endfor %}
+      </div>
+      {% endif %}
+
+
+      {% for evento in eventos_lista %}
       <div class="evento">
-        <div class="dia">4</div>
-        <h3>Palestra Ciência da Computação</h3>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec quis commodo ligula. Maecenas mollis rutrum
-          libero.</p>
+        <div class="dia">{{ evento.data_inicio.day }}</div>
+        <h3>{{ evento.tipo }}</h3>
+        <p>
+          <strong>Local:</strong> {{ evento.local }} <br>
+          <strong>Data Fim:</strong> {{ evento.data_fim }}
+        </p>
+
         <div class="acoes">
-          <a href="certificados.html" class="certificadopronto">CERTIFICADO</a>
+          {% if evento.data_fim < hoje %}
+          <a href="{% url 'gerar_certificado' evento.id %}" class="certificadopronto">GERAR CERTIFICADO</a>
+
+          {% else %}
+          <a href="{% url 'cancelar_inscricao' evento.id %}" class="btn-cancelar"
+             onclick="return confirm('Tem certeza que deseja cancelar sua inscrição neste evento?');">
+            CANCELAR INSCRIÇÃO
+          </a>
+          {% endif %}
+
         </div>
       </div>
+      {% endfor %}
 
+      {% if not eventos_lista %}
       <div class="evento">
-        <div class="dia">9</div>
-        <h3>Monitoria Complementar</h3>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec quis commodo ligula. Maecenas mollis rutrum
-          libero.</p>
-        <div class="acoes">
-          <a href="#" class="certificadonaopronto">CERTIFICADO</a>
-
-        </div>
+        <h3>Você ainda não se inscreveu em nenhum evento.</h3>
+        <p>Visite a página <a href="{% url 'eventos' %}">Eventos</a> para se inscrever!</p>
       </div>
+      {% endif %}
 
-      <div class="evento">
-        <div class="dia">12</div>
-        <h3>Seminário</h3>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec quis commodo ligula. Maecenas mollis rutrum
-          libero.</p>
-        <div class="acoes">
-          <a href="certificados.html" class="certificadopronto">CERTIFICADO</a>
-
-        </div>
-      </div>
 
     </section>
 

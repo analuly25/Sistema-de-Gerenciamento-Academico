@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Eventify - Criar Evento</title>
+  {% load static %}
+  <link rel="stylesheet" href="{% static 'style.css' %}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+  
+  <div class="containerlogin">
+
+    <div class="left signup-left">
+      <div class="signup-box">
+        <h2>Criar Novo Evento</h2>
+
+        {% if messages %}
+        <div class="messages">
+          {% for message in messages %}
+          <p
+            style="color: {% if message.tags == 'error' %}red{% else %}green{% endif %}; text-align: center; margin-bottom: 15px; font-weight: bold;">
+            {{ message }}
+          </p>
+          {% endfor %}
+        </div>
+        {% endif %}
+
+        <form method="POST" action="{% url 'criar_evento' %}">
+          {% csrf_token %}
+
+          <div class="input-group">
+            <i class="fa fa-tag"></i>
+            <input type="text" placeholder="Tipo de Evento (ex: Palestra, Seminário)" name="tipo" required>
+          </div>
+          
+          <div class="input-group">
+            <i class="fa fa-calendar-check"></i>
+            <input type="text" placeholder="Data de Início (AAAA-MM-DD)" name="data_inicio" onfocus="(this.type='date')" required>
+          </div>
+          
+          <div class="input-group">
+            <i class="fa fa-calendar-times"></i>
+            <input type="text" placeholder="Data de Fim (AAAA-MM-DD)" name="data_fim" onfocus="(this.type='date')" required>
+          </div>
+          
+          <div class="input-group">
+            <i class="fa fa-clock"></i>
+            <input type="text" placeholder="Horário (HH:MM)" name="horario" onfocus="(this.type='time')" required>
+          </div>
+
+          <div class="input-group">
+            <i class="fa fa-map-marker-alt"></i>
+            <input type="text" placeholder="Local" name="local" required>
+          </div>
+          
+          <div class="input-group">
+            <i class="fa fa-users"></i>
+            <input type="number" placeholder="Quantidade de Participantes" name="qtd_participantes" min="1" required>
+          </div>
+
+          <button type="submit" class="btn-login">Criar Evento</button>
+        </form>
+        
+      </div>
+    </div>
+
+    <div class="right signup-right">
+      <a href="index.html" class="logo">
+        <img src="{% static 'images/logo.png' %}" alt="Eventify Logo">
+      </a>
+      <div class="welcome-img">
+        <img src="{% static 'images/eventifylogo.png' %}" alt="Imagem decorativa">
+      </div>
+    </div>
+
+  </div>
+</body>
+
+</html>

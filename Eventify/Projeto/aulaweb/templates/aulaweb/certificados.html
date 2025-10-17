@@ -18,16 +18,21 @@
       <img src="{% static 'images/logo.png' %}" alt="Eventify Logo" class="logo">
     </a>
 
-    <!-- Botão de menu hamburguer -->
     <div class="menu-toggle" id="menu-toggle">
       ☰
     </div>
 
     <nav id="nav-menu">
-      <a href="eventos.html">EVENTOS</a>
-      <a href="certificados.html">MEUS CERTIFICADOS</a>
-      <a href="meuseventos.html">MEUS EVENTOS</a>
-      <a href="perfil.html">PERFIL</a>
+      <a href="{% url 'eventos' %}">EVENTOS</a>
+      <a href="{% url 'meuseventos' %}">MEUS EVENTOS</a>
+      <a href="{% url 'certificados' %}">MEUS CERTIFICADOS</a>
+      
+      {% if usuario.perfil == 'organizador' %}
+        <a href="{% url 'criar_evento' %}" style="background-color: #f8e08e;">CRIAR EVENTO</a>
+      {% endif %}
+      
+      <a href="{% url 'perfil' %}">PERFIL</a>
+      <a href="{% url 'logout' %}">SAIR</a>
     </nav>
   </header>
 
@@ -36,48 +41,33 @@
   <div class="containercertificados">
 
     <h2>Certificados</h2>
+    
+    {% if messages %}
+      <div class="messages" style="margin-bottom: 20px;">
+        {% for message in messages %}
+          <p style="color: {% if message.tags == 'error' %}red{% elif message.tags == 'warning' %}#b8860b{% else %}green{% endif %}; text-align: center; margin-bottom: 10px; font-weight: bold; background: #fff; padding: 10px; border-radius: 10px;">
+            {{ message }}
+          </p>
+        {% endfor %}
+      </div>
+    {% endif %}
 
     <div class="gridcertificados">
 
+      {% for certificado in certificados_lista %}
       <div class="cardcertificados">
-        <h3>Monitoria</h3>
-        <img src="{% static 'images/certificado.webp' %}" alt="Certificado Monitoria">
+        <h3>{{ certificado.inscricao.evento.tipo }}</h3>
+        
+        <p style="font-size: 12px; color: #555;">Emitido em: {{ certificado.data_emissao }}</p>
+        
+        <img src="{% static 'images/certificado.webp' %}" alt="Certificado {{ certificado.inscricao.evento.tipo }}">
       </div>
+      {% endfor %}
 
-      <div class="cardcertificados">
-        <h3>Palestra</h3>
-        <img src="{% static 'images/certificado.webp' %}" alt="Certificado Palestra">
-      </div>
-
-      <div class="cardcertificados">
-        <h3>Monitoria</h3>
-        <img src="{% static 'images/certificado.webp' %}" alt="Certificado Monitoria">
-      </div>
-
-      <div class="cardcertificados">
-        <h3>Palestra</h3>
-        <img src="{% static 'images/certificado.webp' %}" alt="Certificado Palestra">
-      </div>
-
-      <div class="cardcertificados">
-        <h3>Monitoria</h3>
-        <img src="{% static 'images/certificado.webp' %}" alt="Certificado Monitoria">
-      </div>
-
-      <div class="cardcertificados">
-        <h3>Palestra</h3>
-        <img src="{% static 'images/certificado.webp' %}" alt="Certificado Palestra">
-      </div>
-
-      <div class="cardcertificados">
-        <h3>Palestra</h3>
-        <img src="{% static 'images/certificado.webp' %}" alt="Certificado Palestra">
-      </div>
-
-      <div class="cardcertificados">
-        <h3>Palestra</h3>
-        <img src="{% static 'images/certificado.webp' %}" alt="Certificado Palestra">
-      </div>
+      {% if not certificados_lista %}
+        <p>Você ainda não possui certificados emitidos.</p>
+        <p>Vá em <a href="{% url 'meuseventos' %}">Meus Eventos</a> para gerar certificados de eventos concluídos.</p>
+      {% endif %}
 
     </div>
 
