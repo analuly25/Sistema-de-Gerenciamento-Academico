@@ -1,5 +1,5 @@
 /* ========================================================================= */
-/* 1. ESTILOS GERAIS */
+/* 1. Estilos Gerais */
 /* ========================================================================= */
 
 * {
@@ -14,7 +14,7 @@ body {
   background-color: #f2efe9; 
 }
 
-/* --- ESTILOS PADRÃO PARA BOTÕES E LINKS DE AUTENTICAÇÃO --- */
+/* --- Estilos padrão para botões e links de autenticação --- */
 .btn-login,
 .btn-signup,
 a.btn-login,
@@ -35,7 +35,7 @@ button.btn-signup {
 
 
 /* ========================================================================= */
-/* 2. CABEÇALHO E NAVEGAÇÃO (HEADER & NAV) */
+/* 2. Cabeçalho e navegação (header e navegação (header e nav)) */
 /* ========================================================================= */
 
 header {
@@ -114,7 +114,7 @@ nav a:hover {
 }
 
 /* ========================================================================= */
-/* 3. PÁGINA INICIAL (INDEX.HTML) */
+/* 3. Página inicial (index.html) */
 /* ========================================================================= */
 
 .subtitulo {
@@ -261,7 +261,7 @@ nav a:hover {
 }
 
 /* ========================================================================= */
-/* 4. PÁGINAS DE AUTENTICAÇÃO (LOGIN.HTML / SIGNUP.HTML) */
+/* 4. Páginas de autenticação (login.html / signup.html) */
 /* ========================================================================= */
 
 .containerlogin {
@@ -546,7 +546,7 @@ nav a:hover {
 }
 
 /* ========================================================================= */
-/* 5. PÁGINAS DE EVENTOS (EVENTOS.HTML / MEUSEVENTOS.HTML) */
+/* 5. Páginas de eventos (evento.html / meuseventos.html) */
 /* ========================================================================= */
 
 body.paginaeventos {
@@ -749,7 +749,7 @@ body.paginaeventos {
 }
 
 /* ========================================================================= */
-/* 6. PÁGINA DE CERTIFICADOS (CERTIFICADOS.HTML) */
+/* 6. Páginas de certificados (certificados.html) */
 /* ========================================================================= */
 
 body.paginacertificados {
@@ -802,7 +802,7 @@ body.paginacertificados {
 
 
 /* ========================================================================= */
-/* 7. PÁGINA DE PERFIL (PERFIL.HTML) */
+/* 7. Página de Perfil (perfil.html) */
 /* ========================================================================= */
 
 .perfil-container {
@@ -882,11 +882,11 @@ body.paginacertificados {
 }
 
 /* ========================================================================= */
-/* 8. ESTILOS DA DIV DE DETALHES DO EVENTO */
+/* 8. Estilos da div de detalhes do evento */
 /* ========================================================================= */
 
 /* Faz o título do evento na lista ser clicável */
-/* Faz o título do evento na lista ser clicável */
+
 .evento h3.evento-titulo-clicavel {
   cursor: pointer;
   color: #333;
@@ -898,24 +898,24 @@ body.paginacertificados {
 
 /* A caixa de detalhes (inspirada na classe .evento) */
 .evento-detalhe {
-  background: #fffdf9; /* Um fundo ligeiramente diferente do .evento (#fff) */
+  background: #fffdf9;
   border-radius: 15px;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
   padding: 20px 30px;
   margin-bottom: 20px;
-  /* margin-left: 5%; */ /* Opcional: para indentar */
+
   position: relative;
   border: 1px solid #e6532d;
 }
 
-/* Título na caixa de detalhes */
+
 .evento-detalhe h3 {
   font-size: 22px;
   color: #e6532d;
   margin-bottom: 20px;
 }
 
-/* Parágrafo na caixa de detalhes */
+
 .evento-detalhe p {
   font-size: 16px;
   line-height: 1.6;
@@ -926,7 +926,6 @@ body.paginacertificados {
   color: #000;
 }
 
-/* Botão de fechar (reutilizado do modal) */
 .detalhe-close {
   position: absolute;
   top: 15px;
@@ -943,15 +942,15 @@ body.paginacertificados {
 }
 
 /* ========================================================================= */
-/* 9. BOTÃO DE CANCELAR INSCRIÇÃO */
+/* 9. Botão de cancelar inscrição */
 /* ========================================================================= */
 
 .evento .acoes .btn-cancelar {
-  background: #e07474; /* Fundo vermelho claro (igual ao .salvar) */
-  color: #e80e0e; /* Texto vermelho escuro */
+  background: #e07474; 
+  color: #e80e0e; 
 
 }
 
 .evento .acoes .btn-cancelar:hover {
-  background: #f1b8b8; /* Vermelho um pouco mais escuro no hover */
+  background: #f1b8b8; 
 }
