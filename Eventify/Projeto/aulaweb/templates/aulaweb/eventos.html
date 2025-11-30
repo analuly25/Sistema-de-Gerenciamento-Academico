@@ -51,6 +51,9 @@
 
       <div class="evento-detalhe" id="evento-detalhe-box" style="display: none;">
         <button class="detalhe-close" id="detalhe-close-btn">&times;</button>
+        
+        <img id="detalhe-banner" src="" alt="Banner do Evento" style="width: 100%; height: 200px; object-fit: cover; border-radius: 10px; margin-bottom: 15px; display: none;">
+
         <h3 id="detalhe-tipo"></h3>
         <p>
           <strong>Organizador:</strong> <span id="detalhe-organizador"></span><br>
@@ -65,6 +68,13 @@
 
       {% for evento in eventos_lista %}
       <div class="evento" id="evento-card-{{ evento.id }}">
+        
+        {% if evento.banner %}
+        <div class="banner-container">
+            <img src="{{ evento.banner.url }}" alt="{{ evento.tipo }}" class="banner-img">
+        </div>
+        {% endif %}
+
         <div class="dia">{{ evento.data_inicio.day }}</div>
 
         <h3>{{ evento.tipo }}</h3>
@@ -74,8 +84,17 @@
           <strong>Data:</strong> {{ evento.data_inicio|date:"d/m/Y" }}
         </p>
 
-        <div class="acoes">
-          <a href="{% url 'inscrever_evento' evento.id %}" class="inscricao">INSCRIÇÃO</a>
+      <div class="acoes">
+          
+          {% if evento.id in inscricoes_ids %}
+            <a href="{% url 'cancelar_inscricao' evento.id %}" 
+               class="btn-cancelar"
+               onclick="return confirm('Tem certeza que deseja sair deste evento?');">
+               CANCELAR
+            </a>
+          {% else %}
+            <a href="{% url 'inscrever_evento' evento.id %}" class="inscricao">INSCRIÇÃO</a>
+          {% endif %}
           
           <a href="#" class="salvar evento-detalhe-btn"
              data-tipo="{{ evento.tipo }}" 
@@ -86,7 +105,8 @@
              data-qtd="{{ evento.qtd_participantes }}"
              data-organizador="{{ evento.organizador.nome }}"
              data-id-evento="{{ evento.id }}"
-             data-card-id="evento-card-{{ evento.id }}">
+             data-card-id="evento-card-{{ evento.id }}"
+             data-banner="{% if evento.banner %}{{ evento.banner.url }}{% endif %}">
             DETALHES
           </a>
         </div>
@@ -190,24 +210,33 @@
     const botoesDetalhe = document.querySelectorAll('.evento-detalhe-btn');
 
     let eventoAbertoId = null; // Para saber qual card está aberto
-
+    
     // 2. Adicionar o "ouvinte" de clique a cada BOTÃO
     botoesDetalhe.forEach(botao => {
       botao.addEventListener('click', (evento) => {
         
-        // Prevenir que o link '#' recarregue a página
         evento.preventDefault(); 
         
-        // 3. Obter os dados guardados nos atributos 'data-*' do BOTÃO
         const dados = botao.dataset;
         const cardId = dados.cardId;
         const cardDiv = document.getElementById(cardId);
 
-        // 4. Lógica de Toggle
         if (eventoAbertoId === cardId) {
           detalheBox.style.display = 'none';
           eventoAbertoId = null;
           return;
+        }
+
+        // --- LÓGICA NOVA DO BANNER ---
+        const imgBanner = document.getElementById('detalhe-banner');
+        if (dados.banner) {
+            // Se tiver banner, atualiza o src e mostra
+            imgBanner.src = dados.banner;
+            imgBanner.style.display = 'block';
+        } else {
+            // Se não tiver, esconde a imagem
+            imgBanner.style.display = 'none';
+            imgBanner.src = '';
         }
 
         // 5. Preencher o HTML da caixa de detalhes

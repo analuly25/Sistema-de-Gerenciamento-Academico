@@ -8,6 +8,8 @@
   {% load static %}
   <link rel="stylesheet" href="{% static 'style.css' %}">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script> 
 </head>
 
 <body>
@@ -33,7 +35,7 @@
         
         <form method="POST" action="{% url 'signup' %}">
           {% csrf_token %}
-
+         
           <div class="input-group">
             <i class="fa fa-user"></i>
             <input type="text" placeholder="Nome Completo" name="nome" required>
@@ -45,6 +47,10 @@
           <div class="input-group">
             <i class="fa fa-lock"></i>
             <input type="password" placeholder="Senha" name="senha" required>
+          </div>
+           <div class="input-group">
+            <i class="fa fa-phone"></i>
+            <input type="text" placeholder="Telefone (XX) XXXXX-XXXX" name="telefone" id="telefone">
           </div>
           <div class="input-group">
             <i class="fa fa-graduation-cap"></i>
@@ -107,6 +113,11 @@
 
 
   </div>
+  <script>
+    $(document).ready(function(){
+      $('#telefone').mask('(00) 00000-0000');
+    });
+  </script>
 </body>
 
 </html>

@@ -4,6 +4,7 @@ from django.contrib import messages
 from .models import Usuario, Evento, Inscricao, Certificado
 from django.db import IntegrityError
 from django.utils import timezone # Importar para verificar a data/hora
+import os
 
 # Create your views here.
 
@@ -116,62 +117,69 @@ def signup(request):
 
 
 def eventos(request):
-    # 1. Buscar todos os eventos do banco de dados
+    # 1. Buscar todos os eventos
     todos_os_eventos = Evento.objects.all().order_by('data_inicio')
     
     usuario_logado = None
+    inscricoes_ids = [] # Lista vazia por padrão
+
     if 'usuario_id' in request.session:
         try:
             usuario_logado = Usuario.objects.get(id=request.session['usuario_id'])
+            
+            # NOVO: Busca apenas os IDs dos eventos que o usuário já se inscreveu
+            # values_list retorna uma lista simples como [1, 5, 8] em vez de objetos completos
+            inscricoes_ids = Inscricao.objects.filter(usuario=usuario_logado).values_list('evento_id', flat=True)
+            
         except Usuario.DoesNotExist:
-            pass # Continua como None
+            pass 
     
-    # 2. Criar o contexto para enviar os eventos E o usuário
     contexto = {
         'eventos_lista': todos_os_eventos,
-        'usuario': usuario_logado # Passa o usuário (ou None)
+        'usuario': usuario_logado,
+        'inscricoes_ids': inscricoes_ids # Enviamos essa lista para o HTML
     }
     
-    # 3. Enviar o contexto para o template
     return render(request, 'aulaweb/eventos.html', contexto)
 
 
+
+
 def criar_evento(request):
-    # 1. Verificar se o usuário está logado
-    if 'usuario_id' not in request.session:
-        messages.error(request, 'Você precisa fazer login como organizador para criar eventos.')
-        return redirect('login')
 
-    try:
-        # 2. Buscar o usuário e verificar se é um organizador
-        usuario_logado = Usuario.objects.get(id=request.session['usuario_id'])
-        if usuario_logado.perfil != 'organizador':
-            messages.error(request, 'Apenas organizadores podem criar eventos.')
-            return redirect('perfil') # Redireciona para o perfil
-            
-    except Usuario.DoesNotExist:
-        messages.error(request, 'Usuário não encontrado. Faça login novamente.')
-        return redirect('login')
-
-    # 3. Se o formulário foi enviado (POST)
     if request.method == 'POST':
-        # 3.1. Obter dados do formulário
+        # Nota: Adicionar request.FILES para pegar a imagem
         tipo = request.POST.get('tipo')
         data_inicio = request.POST.get('data_inicio')
         data_fim = request.POST.get('data_fim')
         horario = request.POST.get('horario')
         local = request.POST.get('local')
         qtd_participantes_str = request.POST.get('qtd_participantes')
-        
-        # 3.2. Validar dados
+        banner_arquivo = request.FILES.get('banner') # Captura o arquivo
+
+        # Validações Básicas
         if not all([tipo, data_inicio, data_fim, horario, local, qtd_participantes_str]):
-            messages.error(request, 'Todos os campos são obrigatórios.')
+            messages.error(request, 'Todos os campos de texto são obrigatórios.')
             return render(request, 'aulaweb/criar_evento.html')
-            
+
+        # Validação do Banner (Tipo de arquivo)
+        if banner_arquivo:
+            extensao = os.path.splitext(banner_arquivo.name)[1].lower()
+            if extensao not in ['.jpg', '.jpeg', '.png', '.webp']:
+                messages.error(request, 'O banner deve ser uma imagem (JPG, PNG ou WEBP).')
+                return render(request, 'aulaweb/criar_evento.html')
+
         try:
             qtd_participantes = int(qtd_participantes_str)
-            
-            # 3.3. Criar o novo evento
+            if qtd_participantes <= 0:
+                 raise ValueError("A quantidade deve ser positiva.")
+
+            # Validação de Datas (Não permitir datas passadas)
+            data_inicio_dt = timezone.datetime.strptime(data_inicio, '%Y-%m-%d').date()
+            if data_inicio_dt < timezone.now().date():
+                 messages.error(request, 'A data de início não pode ser no passado.')
+                 return render(request, 'aulaweb/criar_evento.html')
+
             novo_evento = Evento(
                 tipo=tipo,
                 data_inicio=data_inicio,
@@ -179,19 +187,19 @@ def criar_evento(request):
                 horario=horario,
                 local=local,
                 qtd_participantes=qtd_participantes,
-                organizador=usuario_logado # Define o organizador!
+                organizador=usuario_logado,
+                banner=banner_arquivo # Salva a imagem
             )
             novo_evento.save()
-            
-            messages.success(request, 'Evento criado com sucesso!')
-            return redirect('eventos') # Redireciona para a lista de eventos
-            
-        except ValueError:
-            messages.error(request, 'A quantidade de participantes deve ser um número.')
-        except Exception as e:
-            messages.error(request, f'Ocorreu um erro ao salvar o evento: {e}')
 
-    # 4. Se for GET (primeira vez na página), apenas mostra o formulário
+            messages.success(request, 'Evento criado com sucesso!')
+            return redirect('eventos')
+
+        except ValueError:
+            messages.error(request, 'Quantidade de participantes inválida.')
+        except Exception as e:
+            messages.error(request, f'Erro ao salvar: {e}')
+
     return render(request, 'aulaweb/criar_evento.html')
 
 
@@ -312,28 +320,26 @@ def gerar_certificado(request, evento_id):
         return redirect('meuseventos')
 
 
+# Em aulaweb/views.py
+
 def meuseventos(request):
-    # 1. Verificar se o usuário está logado
-    if 'usuario_id' not in request.session:
-        messages.error(request, 'Você precisa fazer login para ver esta página.')
-        return redirect('login')
+    # ... (código de verificação de login) ...
 
     try:
-        # 2. Buscar o usuário logado
         usuario_logado = Usuario.objects.get(id=request.session['usuario_id'])
         
-        # 3. Buscar os eventos deste usuário
         eventos_inscritos = Evento.objects.filter(
             inscricoes__usuario=usuario_logado
         ).order_by('data_inicio')
         
-        # 4. Enviar a lista de eventos E a data de hoje para o template
+        # O CONTEXTO TEM DE TER 'hoje'
         contexto = {
             'eventos_lista': eventos_inscritos,
-            'hoje': timezone.now().date(), 
-            'usuario': usuario_logado # Passa o usuário para o template
+            'hoje': timezone.now().date(), # <--- VERIFICA ESTA LINHA
+            'usuario': usuario_logado
         }
         return render(request, 'aulaweb/meuseventos.html', contexto)
+        
         
     except Usuario.DoesNotExist:
         if 'usuario_id' in request.session:

@@ -23,7 +23,7 @@ class Usuario(models.Model):
 
     nome = models.CharField(max_length=100, db_column='nome')
     
-    # O campo 'telefone' foi removido daqui.
+    telefone = models.CharField(max_length=20, db_column='telefone', null=True, blank=True)
 
     instituicao = models.CharField(max_length=100, blank=True, null=True, db_column='instituicao')
 
@@ -99,6 +99,8 @@ class Usuario(models.Model):
 class Evento(models.Model):
 
     tipo = models.CharField(max_length=50, db_column='tipo')
+
+    banner = models.ImageField(upload_to='eventos_banners/', null=True, blank=True, db_column='banner')
 
     data_inicio = models.DateField(db_column='data_inicio')
 

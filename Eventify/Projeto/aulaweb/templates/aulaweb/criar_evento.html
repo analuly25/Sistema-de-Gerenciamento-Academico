@@ -8,6 +8,7 @@
   {% load static %}
   <link rel="stylesheet" href="{% static 'style.css' %}">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 
 <body>
@@ -29,7 +30,7 @@
         </div>
         {% endif %}
 
-        <form method="POST" action="{% url 'criar_evento' %}">
+        <form method="POST" action="{% url 'criar_evento' %}" enctype="multipart/form-data">
           {% csrf_token %}
 
           <div class="input-group">
@@ -39,7 +40,7 @@
           
           <div class="input-group">
             <i class="fa fa-calendar-check"></i>
-            <input type="text" placeholder="Data de Início (AAAA-MM-DD)" name="data_inicio" onfocus="(this.type='date')" required>
+            <input type="text" placeholder="Data de Início" name="data_inicio" id="dataInicio" onfocus="(this.type='date')" required>
           </div>
           
           <div class="input-group">
@@ -62,6 +63,12 @@
             <input type="number" placeholder="Quantidade de Participantes" name="qtd_participantes" min="1" required>
           </div>
 
+          <div class="input-group">
+            <i class="fa fa-image"></i>
+            <input type="file" name="banner" id="bannerInput" accept="image/*">
+        </div>
+        <small class="aviso-form">Formatos aceitos: JPG, PNG, WEBP</small>
+
           <button type="submit" class="btn-login">Criar Evento</button>
         </form>
         
@@ -78,6 +85,29 @@
     </div>
 
   </div>
+
+<script>
+  $(document).ready(function(){
+      // 1. Impedir datas passadas
+      var hoje = new Date().toISOString().split('T')[0];
+      $("#dataInicio").attr('min', hoje);
+
+      // 2. Validar se o arquivo é imagem mesmo
+      $("#bannerInput").on('change', function(){
+          var arquivo = this.files[0];
+          if(arquivo){
+              var tipo = arquivo.type;
+              var validos = ['image/jpeg', 'image/png', 'image/webp'];
+              
+              if(!validos.includes(tipo)){
+                  alert("Por favor, selecione apenas arquivos de imagem (JPG, PNG ou WEBP).");
+                  $(this).val(''); // Limpa o campo errado
+              }
+          }
+      });
+  });
+</script>
+
 </body>
 
 </html>

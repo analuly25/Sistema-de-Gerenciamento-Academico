@@ -4,13 +4,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Eventify - Eventos</title>
+  <title>Eventify - Meus Eventos</title>
   {% load static %}
   <link rel="stylesheet" href="{% static 'style.css' %}">
 </head>
 
 <body>
-
 
   <header>
     <a href="{% url 'index' %}">
@@ -33,7 +32,6 @@
     </nav>
   </header>
 
-
   <div class="container">
     <section class="eventos">
       <h2>Meus Eventos</h2>
@@ -49,27 +47,32 @@
       </div>
       {% endif %}
 
-
       {% for evento in eventos_lista %}
       <div class="evento">
+        
+        {% if evento.banner %}
+        <div class="banner-container">
+            <img src="{{ evento.banner.url }}" alt="{{ evento.tipo }}" class="banner-img">
+        </div>
+        {% endif %}
+
         <div class="dia">{{ evento.data_inicio.day }}</div>
         <h3>{{ evento.tipo }}</h3>
         <p>
           <strong>Local:</strong> {{ evento.local }} <br>
-          <strong>Data Fim:</strong> {{ evento.data_fim }}
+          <strong>Data Fim:</strong> {{ evento.data_fim|date:"d/m/Y" }}
         </p>
 
         <div class="acoes">
           {% if evento.data_fim < hoje %}
-          <a href="{% url 'gerar_certificado' evento.id %}" class="certificadopronto">GERAR CERTIFICADO</a>
+            <a href="{% url 'gerar_certificado' evento.id %}" class="certificadopronto">GERAR CERTIFICADO</a>
 
           {% else %}
-          <a href="{% url 'cancelar_inscricao' evento.id %}" class="btn-cancelar"
-             onclick="return confirm('Tem certeza que deseja cancelar sua inscrição neste evento?');">
-            CANCELAR INSCRIÇÃO
-          </a>
+            <a href="{% url 'cancelar_inscricao' evento.id %}" class="btn-cancelar"
+               onclick="return confirm('Tem certeza que deseja cancelar sua inscrição neste evento?');">
+              CANCELAR
+            </a>
           {% endif %}
-
         </div>
       </div>
       {% endfor %}
@@ -81,78 +84,31 @@
       </div>
       {% endif %}
 
-
     </section>
 
     <aside class="calendario">
       <h3>SETEMBRO</h3>
       <table>
-        <tr>
-          <th>Su</th>
-          <th>Mo</th>
-          <th>Tu</th>
-          <th>We</th>
-          <th>Th</th>
-          <th>Fr</th>
-          <th>Sa</th>
-        </tr>
-        <tr>
-          <td></td>
-          <td>1</td>
-          <td>2</td>
-          <td>3</td>
-          <td class="hoje">4</td>
-          <td>5</td>
-          <td>6</td>
-        </tr>
-        <tr>
-          <td>7</td>
-          <td>8</td>
-          <td class="hoje">9</td>
-          <td>10</td>
-          <td>11</td>
-          <td>12</td>
-          <td>13</td>
-        </tr>
-        <tr>
-          <td>14</td>
-          <td>15</td>
-          <td>16</td>
-          <td>17</td>
-          <td>18</td>
-          <td>19</td>
-          <td>20</td>
-        </tr>
-        <tr>
-          <td>21</td>
-          <td>22</td>
-          <td>23</td>
-          <td>24</td>
-          <td>25</td>
-          <td class="hoje">26</td>
-          <td>27</td>
-        </tr>
-        <tr>
-          <td>28</td>
-          <td>29</td>
-          <td>30</td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-        </tr>
+        <tr><th>Su</th><th>Mo</th><th>Tu</th><th>We</th><th>Th</th><th>Fr</th><th>Sa</th></tr>
+        <tr><td></td><td>1</td><td>2</td><td>3</td><td class="hoje">4</td><td>5</td><td>6</td></tr>
+        <tr><td>7</td><td>8</td><td class="hoje">9</td><td>10</td><td>11</td><td>12</td><td>13</td></tr>
+        <tr><td>14</td><td>15</td><td>16</td><td>17</td><td>18</td><td>19</td><td>20</td></tr>
+        <tr><td>21</td><td>22</td><td>23</td><td>24</td><td>25</td><td class="hoje">26</td><td>27</td></tr>
+        <tr><td>28</td><td>29</td><td>30</td><td></td><td></td><td></td><td></td></tr>
       </table>
     </aside>
   </div>
+
+  <script>
+    const menuToggle = document.getElementById('menu-toggle');
+    const navMenu = document.getElementById('nav-menu');
+
+    if (menuToggle && navMenu) {
+      menuToggle.addEventListener('click', () => {
+        navMenu.classList.toggle('active');
+      });
+    }
+  </script>
+
 </body>
-
-<script>
-  const menuToggle = document.getElementById('menu-toggle');
-  const navMenu = document.getElementById('nav-menu');
-
-  menuToggle.addEventListener('click', () => {
-    navMenu.classList.toggle('active');
-  });
-</script>
-
 </html>
