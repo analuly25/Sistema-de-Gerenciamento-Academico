@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Eventify - Criar Evento</title>
+  {% load static %}
+  <link rel="stylesheet" href="{% static 'style.css' %}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  
+  <style>
+    /* --- CORREÇÃO VISUAL PARA O SELECT (COMBOBOX) --- */
+    /* Isso força a caixinha a ter a borda arredondada igual aos inputs */
+    
+    .input-group {
+      position: relative; /* Garante que o ícone fique posicionado em relação à caixa */
+    }
+
+    .input-group select {
+      width: 100%;
+      height: 45px; /* Mesma altura padrão dos inputs */
+      border: 1px solid #ccc; /* A Borda Cinza */
+      border-radius: 50px; /* O arredondamento (pílula) */
+      padding-left: 45px; /* Espaço na esquerda para o ícone não cobrir o texto */
+      padding-right: 15px;
+      background-color: #fff; /* Fundo branco */
+      color: #333; /* Cor do texto */
+      cursor: pointer;
+      
+      /* Remove a seta padrão feia do navegador para ficar mais limpo */
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
+      
+      font-size: 14px; /* Ajuste para combinar com seus inputs */
+    }
+
+    /* Remove a borda azul padrão ao clicar */
+    .input-group select:focus {
+      outline: none;
+      border-color: #999;
+    }
+
+    /* Garante que o ícone fique na posição certa (em cima da borda) */
+    .input-group i {
+      position: absolute;
+      left: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #666; /* Cor do ícone */
+      z-index: 10;
+      pointer-events: none; /* Permite clicar no select através do ícone */
+    }
+
+    /* Ajuste para o scroll na caixa principal */
+    .signup-box {
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+    .signup-box::-webkit-scrollbar { width: 5px; }
+    .signup-box::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.2); border-radius: 10px; }
+  </style>
+</head>
+
+<body>
+  
+  <div class="containerlogin">
+
+    <div class="left signup-left">
+      <div class="signup-box">
+        <h2>Criar Novo Evento</h2>
+
+        {% if messages %}
+        <div class="messages">
+          {% for message in messages %}
+          <p
+            style="color: {% if message.tags == 'error' %}red{% else %}green{% endif %}; text-align: center; margin-bottom: 15px; font-weight: bold;">
+            {{ message }}
+          </p>
+          {% endfor %}
+        </div>
+        {% endif %}
+
+        <form method="POST" action="{% url 'criar_evento' %}" enctype="multipart/form-data">
+          {% csrf_token %}
+
+          <div class="input-group">
+            <i class="fa fa-tag"></i>
+            <input type="text" placeholder="Tipo de Evento (ex: Palestra, Seminário)" name="tipo" required>
+          </div>
+          
+          <div class="input-group">
+            <i class="fa fa-calendar-check"></i>
+            <input type="text" placeholder="Data de Início" name="data_inicio" id="dataInicio" onfocus="(this.type='date')" required>
+          </div>
+          
+          <div class="input-group">
+            <i class="fa fa-calendar-times"></i>
+            <input type="text" placeholder="Data de Fim (AAAA-MM-DD)" name="data_fim" onfocus="(this.type='date')" required>
+          </div>
+          
+          <div class="input-group">
+            <i class="fa fa-clock"></i>
+            <input type="text" placeholder="Horário (HH:MM)" name="horario" onfocus="(this.type='time')" required>
+          </div>
+
+          <div class="input-group">
+            <i class="fa fa-map-marker-alt"></i>
+            <input type="text" placeholder="Local" name="local" required>
+          </div>
+          
+          <div class="input-group">
+            <i class="fa fa-users"></i>
+            <input type="number" placeholder="Quantidade de Participantes" name="qtd_participantes" min="1" required>
+          </div>
+
+          <div class="input-group">
+            <i class="fa fa-chalkboard-user"></i>
+            <select name="responsavel">
+                <option value="" selected>Professor Responsável (Opcional)</option>
+                {% for professor in professores %}
+                    <option value="{{ professor.id }}">{{ professor.nome }}</option>
+                {% endfor %}
+            </select>
+          </div>
+
+          <div class="input-group">
+            <i class="fa fa-image"></i>
+            <input type="file" name="banner" id="bannerInput" accept="image/*" style="padding-top: 10px;"> 
+          </div>
+          <small class="aviso-form" style="display:block; text-align:center; margin-bottom:15px; color:#666;">Formatos aceitos: JPG, PNG, WEBP</small>
+
+          <button type="submit" class="btn-login">Criar Evento</button>
+        </form>
+        
+      </div>
+    </div>
+
+    <div class="right signup-right">
+      <a href="{% url 'index' %}" class="logo">
+        <img src="{% static 'images/logo.png' %}" alt="Eventify Logo">
+      </a>
+      <div class="welcome-img">
+        <img src="{% static 'images/eventifylogo.png' %}" alt="Imagem decorativa">
+      </div>
+    </div>
+
+  </div>
+
+<script>
+  $(document).ready(function(){
+      // 1. Impedir datas passadas
+      var hoje = new Date().toISOString().split('T')[0];
+      $("#dataInicio").attr('min', hoje);
+
+      // 2. Validar se o arquivo é imagem mesmo
+      $("#bannerInput").on('change', function(){
+          var arquivo = this.files[0];
+          if(arquivo){
+              var tipo = arquivo.type;
+              var validos = ['image/jpeg', 'image/png', 'image/webp'];
+              
+              if(!validos.includes(tipo)){
+                  alert("Por favor, selecione apenas arquivos de imagem (JPG, PNG ou WEBP).");
+                  $(this).val(''); // Limpa o campo errado
+              }
+          }
+      });
+  });
+</script>
+
+</body>
+</html>

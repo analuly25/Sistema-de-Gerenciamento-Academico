@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Eventify - Eventos</title>
+  {% load static %}
+  <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+
+
+<body class='paginaeventos'>
+
+  <header>
+    <a href="{% url 'index' %}">
+      <img src="{% static 'images/logo.png' %}" alt="Eventify Logo" class="logo">
+    </a>
+
+    <div class="menu-toggle" id="menu-toggle">
+      ☰
+    </div>
+
+    <nav id="nav-menu">
+      <a href="{% url 'eventos' %}">EVENTOS</a>
+      <a href="{% url 'meuseventos' %}">MEUS EVENTOS</a>
+      <a href="{% url 'certificados' %}">MEUS CERTIFICADOS</a>
+      {% if usuario.perfil == 'organizador' %}
+      <a href="{% url 'criar_evento' %}" style="background-color: #f8e08e;">CRIAR EVENTO</a>
+      {% endif %}
+      <a href="{% url 'perfil' %}">PERFIL</a>
+      <a href="{% url 'logout' %}">SAIR</a>
+    </nav>
+  </header>
+
+
+  <div class="container">
+    <section class="eventos">
+      <h2>Próximos Eventos</h2>
+
+      {% if messages %}
+      <div class="messages" style="margin-bottom: 20px;">
+        {% for message in messages %}
+        <p
+          style="color: {% if message.tags == 'error' %}red{% elif message.tags == 'warning' %}#b8860b{% else %}green{% endif %}; text-align: center; margin-bottom: 10px; font-weight: bold; background: #fff; padding: 10px; border-radius: 10px;">
+          {{ message }}
+        </p>
+        {% endfor %}
+      </div>
+      {% endif %}
+
+      <div class="evento-detalhe" id="evento-detalhe-box" style="display: none;">
+        <button class="detalhe-close" id="detalhe-close-btn">&times;</button>
+        
+        <img id="detalhe-banner" src="" alt="Banner do Evento" style="width: 100%; height: 200px; object-fit: cover; border-radius: 10px; margin-bottom: 15px; display: none;">
+
+        <h3 id="detalhe-tipo"></h3>
+        <p>
+          <strong>Organizador:</strong> <span id="detalhe-organizador"></span><br>
+          <strong>Local:</strong> <span id="detalhe-local"></span><br>
+          <strong>Início:</strong> <span id="detalhe-data_inicio"></span><br>
+          <strong>Fim:</strong> <span id="detalhe-data_fim"></span><br>
+          <strong>Horário:</strong> <span id="detalhe-horario"></span><br>
+          <strong>Vagas:</strong> <span id="detalhe-qtd"></span>
+        </p>
+      </div>
+
+
+      {% for evento in eventos_lista %}
+      <div class="evento" id="evento-card-{{ evento.id }}">
+  
+        <div class="banner-container">
+            {% if evento.banner %}
+                <img src="{{ evento.banner.url }}" alt="{{ evento.tipo }}" class="banner-img">
+            {% endif %}
+            
+            <div class="vagas-badge {% if evento.vagas_restantes == 0 %}esgotado{% endif %}">
+                {% if evento.vagas_restantes == 0 %}
+                    ESGOTADO
+                {% else %}
+                    Restam: {{ evento.vagas_restantes }}
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="dia">{{ evento.data_inicio.day }}</div>
+
+        <h3>{{ evento.tipo }}</h3>
+
+        <p>
+          <strong>Local:</strong> {{ evento.local }} <br>
+          <strong>Data:</strong> {{ evento.data_inicio|date:"d/m/Y" }}
+        </p>
+
+      <div class="acoes">
+
+<div class="acoes">
+          
+          {% if usuario.perfil == 'organizador' and usuario.id == evento.organizador.id %}
+            <a href="{% url 'editar_evento' evento.id %}" class="btn-editar" style="background-color: #f0ad4e; color: white; margin-right: 5px;">
+               <i class="fa fa-pencil-alt"></i>
+            </a>
+          {% endif %}
+
+          {% if evento.id in inscricoes_ids %}
+            <a href="{% url 'cancelar_inscricao' evento.id %}" 
+               class="btn-cancelar"
+               onclick="return confirm('Tem certeza que deseja sair deste evento?');">
+               CANCELAR
+            </a>
+          {% else %}
+            <a href="{% url 'inscrever_evento' evento.id %}" class="inscricao">INSCRIÇÃO</a>
+          {% endif %}
+          
+            <a href="#" class="salvar evento-detalhe-btn"
+              data-tipo="{{ evento.tipo }}" 
+              data-local="{{ evento.local }}"
+              data-data_inicio="{{ evento.data_inicio|date:"d/m/Y" }}" 
+              data-data_fim="{{ evento.data_fim|date:"d/m/Y" }}"
+              data-horario="{{ evento.horario|time:"H:i" }}" 
+              data-qtd="{{ evento.qtd_participantes }}"
+              data-restantes="{{ evento.vagas_restantes }}"  data-organizador="{{ evento.organizador.nome }}"
+              data-id-evento="{{ evento.id }}"
+              data-card-id="evento-card-{{ evento.id }}"
+              data-banner="{% if evento.banner %}{{ evento.banner.url }}{% endif %}">
+            DETALHES
+          </a>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+
+      {% if not eventos_lista %}
+      <div class="evento">
+        <h3>Nenhum evento cadastrado no momento.</h3>
+        <p>Volte mais tarde!</p>
+      </div>
+      {% endif %}
+
+
+    </section>
+
+    <aside class="calendario">
+      <h3>DEZEMBRO</h3>
+      <table>
+        <tr>
+          <th>Su</th>
+          <th>Mo</th>
+          <th>Tu</th>
+          <th>We</th>
+          <th>Th</th>
+          <th>Fr</th>
+          <th>Sa</th>
+        </tr>
+        <tr>
+          <td></td>
+          <td>1</td>
+          <td>2</td>
+          <td>3</td>
+          <td class="hoje">4</td>
+          <td>5</td>
+          <td>6</td>
+        </tr>
+        <tr>
+          <td>7</td>
+          <td>8</td>
+          <td class="hoje">9</td>
+          <td>10</td>
+          <td>11</td>
+          <td>12</td>
+          <td>13</td>
+        </tr>
+        <tr>
+          <td>14</td>
+          <td>15</td>
+          <td>16</td>
+          <td>17</td>
+          <td>18</td>
+          <td>19</td>
+          <td>20</td>
+        </tr>
+        <tr>
+          <td>21</td>
+          <td>22</td>
+          <td>23</td>
+          <td>24</td>
+          <td>25</td>
+          <td class="hoje">26</td>
+          <td>27</td>
+        </tr>
+        <tr>
+          <td>28</td>
+          <td>29</td>
+          <td>30</td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+      </table>
+    </aside>
+  </div>
+
+
+  <script>
+
+    const menuToggle = document.getElementById('menu-toggle');
+    const navMenu = document.getElementById('nav-menu');
+
+    if (menuToggle && navMenu) {
+      menuToggle.addEventListener('click', () => {
+        navMenu.classList.toggle('active');
+      });
+    }
+
+    // ===================================
+    // Lógica da Div de Detalhes
+    // ===================================
+
+    // 1. Selecionar os elementos do DOM
+    const detalheBox = document.getElementById('evento-detalhe-box');
+    const detalheCloseBtn = document.getElementById('detalhe-close-btn');
+    
+    // ===============================
+    // MUDANÇA AQUI: O seletor mudou
+    // ===============================
+    const botoesDetalhe = document.querySelectorAll('.evento-detalhe-btn');
+
+    let eventoAbertoId = null; // Para saber qual card está aberto
+    
+    // 2. Adicionar o "ouvinte" de clique a cada BOTÃO
+    botoesDetalhe.forEach(botao => {
+      botao.addEventListener('click', (evento) => {
+        
+        evento.preventDefault(); 
+        
+        const dados = botao.dataset;
+        const cardId = dados.cardId;
+        const cardDiv = document.getElementById(cardId);
+
+        if (eventoAbertoId === cardId) {
+          detalheBox.style.display = 'none';
+          eventoAbertoId = null;
+          return;
+        }
+
+        // --- LÓGICA NOVA DO BANNER ---
+        const imgBanner = document.getElementById('detalhe-banner');
+        if (dados.banner) {
+            // Se tiver banner, atualiza o src e mostra
+            imgBanner.src = dados.banner;
+            imgBanner.style.display = 'block';
+        } else {
+            // Se não tiver, esconde a imagem
+            imgBanner.style.display = 'none';
+            imgBanner.src = '';
+        }
+
+        // 5. Preencher o HTML da caixa de detalhes
+        document.getElementById('detalhe-tipo').textContent = dados.tipo;
+        document.getElementById('detalhe-organizador').textContent = dados.organizador;
+        document.getElementById('detalhe-local').textContent = dados.local;
+        document.getElementById('detalhe-data_inicio').textContent = dados.data_inicio;
+        document.getElementById('detalhe-data_fim').textContent = dados.data_fim;
+        document.getElementById('detalhe-horario').textContent = dados.horario;
+        const textoVagas = dados.restantes == 0 
+          ? "ESGOTADO (" + dados.qtd + " vagas preenchidas)" 
+          : dados.restantes + " livres (de " + dados.qtd + ")";
+
+        document.getElementById('detalhe-qtd').textContent = textoVagas;
+        // 6. Mover a caixa de detalhes
+        cardDiv.after(detalheBox);
+
+        // 7. Mostrar a caixa de detalhes
+        detalheBox.style.display = 'block';
+
+        // 8. Guardar a referência
+        eventoAbertoId = cardId;
+      });
+    });
+
+    // 9. Função para fechar a caixa de detalhes
+    const fecharDetalhes = () => {
+      detalheBox.style.display = 'none';
+      eventoAbertoId = null;
+    };
+
+    // 10. Adicionar "ouvinte" para fechar a caixa
+    detalheCloseBtn.addEventListener('click', fecharDetalhes);
+
+  </script>
+
+</body>
+
+</html>

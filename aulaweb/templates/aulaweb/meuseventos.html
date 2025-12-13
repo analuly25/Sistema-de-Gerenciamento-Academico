@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Eventify - Meus Eventos</title>
+  {% load static %}
+  <link rel="stylesheet" href="{% static 'style.css' %}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+
+  <header>
+    <a href="{% url 'index' %}">
+      <img src="{% static 'images/logo.png' %}" alt="Eventify Logo" class="logo">
+    </a>
+
+    <div class="menu-toggle" id="menu-toggle">
+      ☰
+    </div>
+
+    <nav id="nav-menu">
+      <a href="{% url 'eventos' %}">EVENTOS</a>
+      <a href="{% url 'meuseventos' %}">MEUS EVENTOS</a>
+      <a href="{% url 'certificados' %}">MEUS CERTIFICADOS</a>
+      {% if usuario.perfil == 'organizador' %}
+      <a href="{% url 'criar_evento' %}" style="background-color: #f8e08e;">CRIAR EVENTO</a>
+      {% endif %}
+      <a href="{% url 'perfil' %}">PERFIL</a>
+      <a href="{% url 'logout' %}">SAIR</a>
+    </nav>
+  </header>
+
+  <div class="container">
+    <section class="eventos">
+      <h2>Meus Eventos</h2>
+
+      {% if messages %}
+      <div class="messages" style="margin-bottom: 20px;">
+        {% for message in messages %}
+        <p
+          style="color: {% if message.tags == 'error' %}red{% elif message.tags == 'warning' %}#b8860b{% else %}green{% endif %}; text-align: center; margin-bottom: 10px; font-weight: bold; background: #fff; padding: 10px; border-radius: 10px;">
+          {{ message }}
+        </p>
+        {% endfor %}
+      </div>
+      {% endif %}
+
+      {% for item in lista_eventos %}
+      <div class="evento">
+        
+        {% if item.dados.evento.banner %}
+        <div class="banner-container">
+            <img src="{{ item.dados.evento.banner.url }}" alt="{{ item.dados.evento.tipo }}" class="banner-img">
+        </div>
+        {% endif %}
+
+        <div class="dia">{{ item.dados.evento.data_inicio.day }}</div>
+        <h3>{{ item.dados.evento.tipo }}</h3>
+        <p>
+          <strong>Local:</strong> {{ item.dados.evento.local }} <br>
+          <strong>Data Fim:</strong> {{ item.dados.evento.data_fim|date:"d/m/Y" }}
+        </p>
+      
+        <div class="acoes">
+          
+          {% if item.ja_emitiu %}
+            <div style="color: green; font-weight: bold; border: 1px solid green; padding: 8px; border-radius: 5px; text-align: center; width: 100%;">
+                <i class="fa fa-check-circle"></i> Evento Realizado
+            </div>
+
+          {% elif item.dados.evento.data_fim < hoje %}
+            <a href="{% url 'gerar_certificado' item.dados.evento.id %}" class="certificadopronto">GERAR CERTIFICADO</a>
+
+          {% else %}
+            <a href="{% url 'cancelar_inscricao' item.dados.evento.id %}" class="btn-cancelar"
+               onclick="return confirm('Tem certeza que deseja cancelar sua inscrição neste evento?');">
+              CANCELAR
+            </a>
+          {% endif %}
+
+        </div>
+      </div>
+      {% endfor %}
+
+      {% if not lista_eventos %}
+      <div class="evento">
+        <h3>Você ainda não se inscreveu em nenhum evento.</h3>
+        <p>Visite a página <a href="{% url 'eventos' %}">Eventos</a> para se inscrever!</p>
+      </div>
+      {% endif %}
+
+   </section>
+
+    <aside class="calendario">
+      <h3>DEZEMBRO</h3>
+      <table>
+        <tr>
+          <th>Su</th>
+          <th>Mo</th>
+          <th>Tu</th>
+          <th>We</th>
+          <th>Th</th>
+          <th>Fr</th>
+          <th>Sa</th>
+        </tr>
+        <tr>
+          <td></td>
+          <td>1</td>
+          <td>2</td>
+          <td>3</td>
+          <td class="hoje">4</td>
+          <td>5</td>
+          <td>6</td>
+        </tr>
+        <tr>
+          <td>7</td>
+          <td>8</td>
+          <td class="hoje">9</td>
+          <td>10</td>
+          <td>11</td>
+          <td>12</td>
+          <td>13</td>
+        </tr>
+        <tr>
+          <td>14</td>
+          <td>15</td>
+          <td>16</td>
+          <td>17</td>
+          <td>18</td>
+          <td>19</td>
+          <td>20</td>
+        </tr>
+        <tr>
+          <td>21</td>
+          <td>22</td>
+          <td>23</td>
+          <td>24</td>
+          <td>25</td>
+          <td class="hoje">26</td>
+          <td>27</td>
+        </tr>
+        <tr>
+          <td>28</td>
+          <td>29</td>
+          <td>30</td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+      </table>
+    </aside>
+  </div>

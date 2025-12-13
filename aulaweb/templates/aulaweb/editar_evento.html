@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Eventify - Editar Evento</title>
+  {% load static %}
+  <link rel="stylesheet" href="{% static 'style.css' %}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+  <div class="containerlogin">
+    <div class="left signup-left">
+      <div class="signup-box">
+        <h2>Editar <span>Evento</span></h2>
+
+        {% if messages %}
+        <div class="messages">
+          {% for message in messages %}
+          <p style="color: {% if message.tags == 'error' %}red{% else %}green{% endif %}; text-align: center; margin-bottom: 15px; font-weight: bold;">
+            {{ message }}
+          </p>
+          {% endfor %}
+        </div>
+        {% endif %}
+
+        <form method="POST" action="{% url 'editar_evento' evento.id %}" enctype="multipart/form-data">
+          {% csrf_token %}
+
+          <label style="display:block; text-align:left; color:#666; font-size:12px; margin-bottom:5px; margin-left:15px;">Nome do Evento</label>
+          <div class="input-group">
+            <i class="fa fa-tag"></i>
+            <input type="text" name="tipo" value="{{ evento.tipo }}" required>
+          </div>
+          
+          <label style="display:block; text-align:left; color:#666; font-size:12px; margin-bottom:5px; margin-left:15px;">Data Início</label>
+          <div class="input-group">
+            <i class="fa fa-calendar-check"></i>
+            <input type="date" name="data_inicio" value="{{ evento.data_inicio|date:'Y-m-d' }}" required>
+          </div>
+          
+          <label style="display:block; text-align:left; color:#666; font-size:12px; margin-bottom:5px; margin-left:15px;">Data Fim</label>
+          <div class="input-group">
+            <i class="fa fa-calendar-times"></i>
+            <input type="date" name="data_fim" value="{{ evento.data_fim|date:'Y-m-d' }}" required>
+          </div>
+          
+          <label style="display:block; text-align:left; color:#666; font-size:12px; margin-bottom:5px; margin-left:15px;">Horário</label>
+          <div class="input-group">
+            <i class="fa fa-clock"></i>
+            <input type="time" name="horario" value="{{ evento.horario|time:'H:i' }}" required>
+          </div>
+
+          <label style="display:block; text-align:left; color:#666; font-size:12px; margin-bottom:5px; margin-left:15px;">Local</label>
+          <div class="input-group">
+            <i class="fa fa-map-marker-alt"></i>
+            <input type="text" name="local" value="{{ evento.local }}" required>
+          </div>
+          
+          <label style="display:block; text-align:left; color:#666; font-size:12px; margin-bottom:5px; margin-left:15px;">Vagas Totais</label>
+          <div class="input-group">
+            <i class="fa fa-users"></i>
+            <input type="number" name="qtd_participantes" value="{{ evento.qtd_participantes }}" min="1" required>
+          </div>
+
+          <label style="display:block; text-align:left; color:#666; font-size:12px; margin-bottom:5px; margin-left:15px;">Professor Responsável</label>
+          <div class="input-group">
+            <i class="fa fa-chalkboard-user"></i>
+            <select name="responsavel">
+                <option value="">Selecione...</option>
+                {% for professor in professores %}
+                    <option value="{{ professor.id }}" 
+                        {% if evento.responsavel and evento.responsavel.id == professor.id %}selected{% endif %}>
+                        {{ professor.nome }}
+                    </option>
+                {% endfor %}
+            </select>
+          </div>
+
+          <label style="display:block; text-align:left; color:#666; font-size:12px; margin-bottom:5px; margin-left:15px;">Alterar Banner (Opcional)</label>
+          <div class="input-group">
+            <i class="fa fa-image"></i>
+            <input type="file" name="banner" accept="image/*" style="padding-top: 10px;"> 
+          </div>
+
+          <button type="submit" class="btn-login" style="background-color: #e6532d;">Salvar Alterações</button>
+          
+          <a href="{% url 'eventos' %}" style="display:block; margin-top:10px; color:#666; text-decoration:none; font-size:0.9em;">Cancelar</a>
+        </form>
+      </div>
+    </div>
+
+    <div class="right signup-right">
+        {% if evento.banner %}
+            <img src="{{ evento.banner.url }}" alt="Banner Atual" style="max-width: 80%; border-radius: 10px; margin-bottom: 20px;">
+            <p>Banner Atual</p>
+        {% else %}
+            <img src="{% static 'images/eventifylogo.png' %}" alt="Logo">
+        {% endif %}
+    </div>
+  </div>
+</body>
+</html>

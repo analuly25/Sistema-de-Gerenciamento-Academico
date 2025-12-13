@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Eventify - Editar Perfil</title>
+  {% load static %}
+  <link rel="stylesheet" href="{% static 'style.css' %}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
+
+  <style>
+    .btn-voltar {
+        display: inline-block;
+        margin-top: 10px;
+        color: #666;
+        text-decoration: none;
+        font-size: 0.9em;
+    }
+    .btn-voltar:hover { text-decoration: underline; color: #e6532d; }
+  </style>
+</head>
+
+<body>
+
+  <header>
+    <a href="{% url 'index' %}">
+      <img src="{% static 'images/logo.png' %}" alt="Eventify Logo" class="logo">
+    </a>
+    <nav id="nav-menu">
+      <a href="{% url 'perfil' %}">VOLTAR AO PERFIL</a>
+    </nav>
+  </header>
+
+  <div class="containerlogin">
+    
+    <div class="left signup-left">
+      <div class="signup-box">
+        <h2>Editar <span>Perfil</span></h2>
+
+        {% if messages %}
+        <div class="messages">
+          {% for message in messages %}
+          <p style="color: {% if message.tags == 'error' %}red{% else %}green{% endif %}; text-align: center; margin-bottom: 15px; font-weight: bold;">
+            {{ message }}
+          </p>
+          {% endfor %}
+        </div>
+        {% endif %}
+
+        <form method="POST" action="{% url 'editar_perfil' %}">
+          {% csrf_token %}
+
+          <label style="display:block; text-align:left; color:#666; font-size:12px; margin-bottom:5px; margin-left:15px;">Nome Completo</label>
+          <div class="input-group">
+            <i class="fa fa-user"></i>
+            <input type="text" name="nome" value="{{ usuario.nome }}" required>
+          </div>
+
+          <label style="display:block; text-align:left; color:#666; font-size:12px; margin-bottom:5px; margin-left:15px;">Email</label>
+          <div class="input-group">
+            <i class="fa fa-envelope"></i>
+            <input type="email" name="email" value="{{ usuario.email }}" required>
+          </div>
+
+          <label style="display:block; text-align:left; color:#666; font-size:12px; margin-bottom:5px; margin-left:15px;">Telefone</label>
+          <div class="input-group">
+            <i class="fa fa-phone"></i>
+            <input type="text" name="telefone" id="telefone" value="{{ usuario.telefone|default:'' }}" placeholder="(00) 00000-0000">
+          </div>
+
+          <div class="input-group">
+            <i class="fa fa-graduation-cap"></i>
+            <select name="instituicao" required>
+              <option value="" disabled selected>Instituição</option>
+              <option value="if">Instituto Federal</option>
+              <option value="uni">Universidade</option>
+              <option value="outro">Outro</option>
+            </select>
+          </div>
+
+          <label style="display:block; text-align:left; color:#666; font-size:12px; margin-bottom:5px; margin-left:15px;">Data de Nascimento</label>
+          <div class="input-group">
+            <i class="fa fa-calendar"></i>
+            <input type="date" name="data_nascimento" value="{{ usuario.data_nascimento|date:'Y-m-d' }}">
+          </div>
+
+          <label style="display:block; text-align:left; color:#666; font-size:12px; margin-bottom:5px; margin-left:15px;">Endereço</label>
+          <div class="input-group">
+            <i class="fa fa-home"></i>
+            <input type="text" name="endereco" value="{{ usuario.endereco|default:'' }}">
+          </div>
+
+          <label style="display:block; text-align:left; color:#666; font-size:12px; margin-bottom:5px; margin-left:15px;">Curso</label>
+          <div class="input-group">
+            <i class="fa fa-book"></i>
+            <input type="text" name="curso" value="{{ usuario.curso|default:'' }}">
+          </div>
+
+          <label style="display:block; text-align:left; color:#666; font-size:12px; margin-bottom:5px; margin-left:15px;">Semestre</label>
+          <div class="input-group">
+            <i class="fa fa-list-ol"></i>
+            <input type="number" name="semestre" value="{{ usuario.semestre|default:'' }}">
+          </div>
+
+          <button type="submit" class="btn-login" style="background-color: #e6532d;">Salvar Alterações</button>
+          
+          <a href="{% url 'perfil' %}" class="btn-voltar">Cancelar e Voltar</a>
+        </form>
+      </div>
+    </div>
+
+    <div class="right signup-right">
+        <div class="welcome-img">
+            <img src="{% static 'images/perfil.png' %}" alt="Editar Perfil" style="border-radius: 50%; width: 200px; height: 200px; object-fit: cover;">
+            <h2 style="margin-top: 20px;">{{ usuario.nome }}</h2>
+            <p>{{ usuario.perfil|upper }}</p>
+        </div>
+    </div>
+
+  </div>
+
+<script>
+  $(document).ready(function(){
+    // Máscara para telefone (funciona para 8 ou 9 dígitos)
+    var behavior = function (val) {
+      return val.replace(/\D/g, '').length === 11 ? '(00) 00000-0000' : '(00) 0000-00009';
+    },
+    options = {
+      onKeyPress: function (val, e, field, options) {
+        field.mask(behavior.apply({}, arguments), options);
+      }
+    };
+
+    $('#telefone').mask(behavior, options);
+  });
+</script>
+
+</body>
+</html>

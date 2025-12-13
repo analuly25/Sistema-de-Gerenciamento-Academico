@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Eventify - Certificados</title>
+  {% load static %}
+  <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+
+
+<body class="paginacertificados">
+
+  <header>
+    <a href="index.html">
+      <img src="{% static 'images/logo.png' %}" alt="Eventify Logo" class="logo">
+    </a>
+
+    <div class="menu-toggle" id="menu-toggle">
+      ☰
+    </div>
+
+    <nav id="nav-menu">
+      <a href="{% url 'eventos' %}">EVENTOS</a>
+      <a href="{% url 'meuseventos' %}">MEUS EVENTOS</a>
+      <a href="{% url 'certificados' %}">MEUS CERTIFICADOS</a>
+      
+      {% if usuario.perfil == 'organizador' %}
+        <a href="{% url 'criar_evento' %}" style="background-color: #f8e08e;">CRIAR EVENTO</a>
+      {% endif %}
+      
+      <a href="{% url 'perfil' %}">PERFIL</a>
+      <a href="{% url 'logout' %}">SAIR</a>
+    </nav>
+  </header>
+
+
+
+  <div class="containercertificados">
+
+    <h2>Certificados</h2>
+    
+    {% if messages %}
+      <div class="messages" style="margin-bottom: 20px;">
+        {% for message in messages %}
+          <p style="color: {% if message.tags == 'error' %}red{% elif message.tags == 'warning' %}#b8860b{% else %}green{% endif %}; text-align: center; margin-bottom: 10px; font-weight: bold; background: #fff; padding: 10px; border-radius: 10px;">
+            {{ message }}
+          </p>
+        {% endfor %}
+      </div>
+    {% endif %}
+
+    <div class="gridcertificados">
+
+      {% for certificado in certificados_lista %}
+      <div class="cardcertificados">
+        <h3>{{ certificado.inscricao.evento.tipo }}</h3>
+        
+        <p style="font-size: 12px; color: #555;">Emitido em: {{ certificado.data_emissao }}</p>
+        
+        <img src="{% static 'images/certificado.webp' %}" alt="Certificado {{ certificado.inscricao.evento.tipo }}">
+      </div>
+      {% endfor %}
+
+      {% if not certificados_lista %}
+        <p>Você ainda não possui certificados emitidos.</p>
+        <p>Vá em <a href="{% url 'meuseventos' %}">Meus Eventos</a> para gerar certificados de eventos concluídos.</p>
+      {% endif %}
+
+    </div>
+
+  </div>
+
+  <script>
+    const menuToggle = document.getElementById('menu-toggle');
+    const navMenu = document.getElementById('nav-menu');
+
+    menuToggle.addEventListener('click', () => {
+      navMenu.classList.toggle('active');
+    });
+  </script>
+
+
+</body>
+
+
+</html>

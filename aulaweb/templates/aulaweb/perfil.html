@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Eventify - Perfil</title>
+  {% load static %}
+  <link rel="stylesheet" href="{% static 'style.css' %}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body class="paginacertificados">
+
+  <header>
+    <a href="{% url 'index' %}">
+      <img src="{% static 'images/logo.png' %}" alt="Eventify Logo" class="logo">
+    </a>
+    <div class="menu-toggle" id="menu-toggle">☰</div>
+    <nav id="nav-menu">
+      <a href="{% url 'eventos' %}">EVENTOS</a>
+      <a href="{% url 'meuseventos' %}">MEUS EVENTOS</a>
+      <a href="{% url 'certificados' %}">MEUS CERTIFICADOS</a>
+      {% if usuario.perfil == 'organizador' %}
+        <a href="{% url 'criar_evento' %}" style="background-color: #f8e08e;">CRIAR EVENTO</a>
+      {% endif %}
+      <a href="{% url 'perfil' %}">PERFIL</a>
+      <a href="{% url 'logout' %}">SAIR</a>
+    </nav>
+  </header>
+
+  <h2 class="h2perfil">Meu perfil</h2>
+
+  <div class="perfil-container">
+    <img src="{% static 'images/perfil.png' %}" alt="Foto de Perfil">
+
+    <div class="dados-perfil">
+      <div class="campo">NOME: {{ usuario.nome | default:"Não informado" }}</div>
+      <div class="campo">CURSO: {{ usuario.curso | default:"Não informado" }}</div>
+      <div class="campo">DATA DE NASCIMENTO: {{ usuario.data_nascimento | default:"Não informado" }}</div>
+      <div class="campo">SEMESTRE: {{ usuario.semestre | default:"Não informado" }}</div>
+      <div class="campo">ENDEREÇO: {{ usuario.endereco | default:"Não informado" }}</div>
+      <div class="campo">INSTITUIÇÃO: {{ usuario.instituicao | default:"Não informado" }}</div>
+      <div class="campo">EMAIL: {{ usuario.email | default:"Não informado" }}</div>
+      <div class="campo">LOGIN: {{ usuario.login | default:"Não informado" }}</div>
+
+      <div class="container-botao">
+        
+        <a href="{% url 'editar_perfil' %}" class="btn-perfil btn-editar">
+           <i class="fa fa-pencil-alt"></i> Editar Dados
+        </a>
+
+        {% if usuario.perfil == 'organizador' %}
+            <a href="{% url 'logs_auditoria' %}" class="btn-perfil btn-auditoria">
+               <i class="fa fa-list-alt"></i> Logs de Ações
+            </a>
+        {% endif %}
+        
+      </div>
+      </div>
+  </div>
+
+</body>
+
+<script>
+  const menuToggle = document.getElementById('menu-toggle');
+  const navMenu = document.getElementById('nav-menu');
+
+  menuToggle.addEventListener('click', () => {
+    navMenu.classList.toggle('active');
+  });
+</script>
+
+</html>
